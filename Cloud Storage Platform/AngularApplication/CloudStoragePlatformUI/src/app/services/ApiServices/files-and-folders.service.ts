@@ -64,6 +64,21 @@ public getFilteredFolders(searchString: string): Observable<File[]> {
   return this.httpClient.get<File[]>(`${RETRIEVAL_BASE_URL}/getAllFiltered`, { params });
 }
 
+public semanticSearch(q: string, topK: number = 20, hybrid: boolean = true): Observable<File[]> {
+  Utils.handleStringInvalidError(q);
+  let params = new HttpParams()
+    .set("q", q)
+    .set("topK", topK)
+    .set("hybrid", hybrid);
+  return this.httpClient.get<File[]>(`${RETRIEVAL_BASE_URL}/semanticSearch`, { params });
+}
+
+public suggestFolders(fileId: string, topK: number = 3): Observable<any[]> {
+  Utils.handleStringInvalidError(fileId);
+  let params = new HttpParams().set("fileId", fileId).set("topK", topK);
+  return this.httpClient.get<any[]>(`${RETRIEVAL_BASE_URL}/suggestFolders`, { params });
+}
+
 public getAllFavoriteFolders(): Observable<File[]> {
   let params = new HttpParams();
   const sortVal = localStorage.getItem("sort")?.toString();

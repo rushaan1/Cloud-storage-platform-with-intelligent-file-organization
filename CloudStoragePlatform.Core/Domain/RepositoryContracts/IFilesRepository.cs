@@ -58,5 +58,13 @@ namespace CloudStoragePlatform.Core.Domain.RepositoryContracts
         /// <param name="predicate">The predicate to run against each file.</param>
         /// <returns>Filtered files.</returns>
         Task<List<Core.Domain.Entities.File>> GetFilteredFiles(Func<Core.Domain.Entities.File, bool> predicate);
+
+        /// <summary>
+        /// Retrieves files matching any of the given IDs, scoped to the current user.
+        /// Uses a SQL IN-clause (no in-memory materialization).
+        /// </summary>
+        /// <param name="ids">Collection of file IDs to fetch.</param>
+        /// <returns>Files belonging to the current user matching the given IDs.</returns>
+        Task<List<Core.Domain.Entities.File>> GetFilesByIds(IEnumerable<Guid> ids);
     }
 }

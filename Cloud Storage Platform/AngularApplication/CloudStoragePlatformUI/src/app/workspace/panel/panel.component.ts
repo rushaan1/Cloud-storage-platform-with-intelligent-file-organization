@@ -9,6 +9,7 @@ import {Utils} from "../../Utils";
 import {HttpEvent, HttpEventType} from "@angular/common/http";
 import {NetworkStatusService} from "../../services/network-status-service.service";
 import {finalize} from "rxjs";
+import {debounceTime, distinctUntilChanged} from "rxjs/operators";
 import {FilesStateService} from "../../services/StateManagementServices/files-state.service";
 
 @Component({
@@ -67,6 +68,18 @@ export class PanelComponent implements OnInit, AfterViewChecked {
     this.eventService.listen("forceCdInPanel",()=>{
       console.log("cd forced");
       setTimeout(()=>this.ngAfterViewChecked(), 1000);
+    });
+
+    // Auto-trigger semantic search after the user pauses typing (400ms debounce).
+    // Existing Enter-key/button-click paths still work for impatient users.
+    this.searchFormControl.valueChanges.pipe(
+      debounceTime(400),
+      distinctUntilChanged()
+    ).subscribe((value) => {
+      if (!value || value.toString().trim().length === 0) return;
+      if (this.searchFormControl.invalid) return;
+      if (this.route.snapshot.queryParams['q'] === value) return;
+      this.router.navigate(["searchFilter"], {queryParams: {q: value}});
     });
   }
   setPanelWidth() {

@@ -337,6 +337,26 @@ export class ViewerComponent implements OnInit, OnDestroy{
                   console.log("in state:");
                   console.log(this.filesState.getFilesInViewer());
                 }
+                break;
+              case "embedded":
+                // File is now searchable via semantic search. (No visible UI change in v1 — just a debug log.)
+                console.log("File embedded and searchable: " + data.content.fileId);
+                break;
+              case "folder_suggestion":
+                // Smart upload: the backend thinks this file might fit better elsewhere.
+                if (data.content && data.content.suggestions && data.content.suggestions.length > 0) {
+                  const top = data.content.suggestions[0];
+                  const fileName = data.content.fileName || "(file)";
+                  // Strip the InitialPathForStorage prefix from folderPath for display
+                  let displayPath = top.folderPath || "";
+                  const homeIdx = displayPath.toLowerCase().indexOf("\\home");
+                  if (homeIdx >= 0) displayPath = displayPath.substring(homeIdx).replace(/\\/g, "/");
+                  this.eventService.emit("addNotif", [
+                    "💡 '" + Utils.resize(fileName, 30) + "' might fit better in " + displayPath + " (similarity " + Math.round(top.score * 100) + "%)",
+                    12000
+                  ]);
+                }
+                break;
             }
             this.cdRef.detectChanges();
 
@@ -637,13 +657,28 @@ export class ViewerComponent implements OnInit, OnDestroy{
   handleSearchOperation(){
     if (Utils.validString(this.searchQuery)){
       this.loaderService.loadingStart();
-      this.foldersService.getFilteredFolders(this.searchQuery!).subscribe({
+      this.foldersService.semanticSearch(this.searchQuery!).subscribe({
         next: res => {
           this.filesState.setFilesInViewer(res);
           this.filterOutFoldersBeingMoved();
         },
         error: err => {
-          this.loaderService.loadingEnd();
+          // Semantic search failed (Pinecone/Vertex down, quota, etc.).
+          // Fall back to legacy name-substring search so the user still gets results.
+          this.foldersService.getFilteredFolders(this.searchQuery!).subscribe({
+            next: res => {
+              this.filesState.setFilesInViewer(res);
+              this.filterOutFoldersBeingMoved();
+              this.eventService.emit("addNotif", ["Showing name matches only (smart search unavailable)", 4000]);
+            },
+            error: () => {
+              this.loaderService.loadingEnd();
+            },
+            complete: () => {
+              this.loaderService.loadingEnd();
+              this.handleEmptyTxt("No search results match "+this.searchQuery);
+            }
+          });
         },
         complete: () => {
           this.loaderService.loadingEnd();

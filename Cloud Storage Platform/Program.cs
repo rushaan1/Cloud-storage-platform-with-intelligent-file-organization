@@ -8,6 +8,7 @@ using CloudStoragePlatform.Core.Domain.IdentityEntites;
 using CloudStoragePlatform.Core.Domain.RepositoryContracts;
 using CloudStoragePlatform.Core.ServiceContracts;
 using CloudStoragePlatform.Core.Services;
+using CloudStoragePlatform.Core.Services.Ai;
 using CloudStoragePlatform.Infrastructure.DbContext;
 using CloudStoragePlatform.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -81,6 +82,22 @@ namespace CloudStoragePlatform.Web
             builder.Services.AddScoped<IAiUpscaleProcessor, AiUpscaleProcessor>();
             builder.Services.AddScoped<IModelBinder, AppendToPath>();
             builder.Services.AddScoped<IModelBinder, RemoveInvalidFileFolderNameCharactersBinder>();
+
+            // Semantic search + smart-upload AI stack
+            builder.Services.AddSingleton<IVertexAccessTokenProvider, VertexAccessTokenProvider>();
+            builder.Services.AddHttpClient<IVertexEmbeddingClient, VertexEmbeddingClient>();
+            builder.Services.AddHttpClient<IGeminiCaptioner, GeminiCaptioner>();
+            builder.Services.AddHttpClient<IPineconeClient, PineconeClient>();
+            builder.Services.AddScoped<IFileEmbeddingRepository, FileEmbeddingRepository>();
+            builder.Services.AddScoped<IFolderEmbeddingRepository, FolderEmbeddingRepository>();
+            builder.Services.AddScoped<IContentExtractor, ContentExtractor>();
+            builder.Services.AddScoped<IFileEmbeddingSync, FileEmbeddingSync>();
+            builder.Services.AddScoped<ISemanticSearchService, SemanticSearchService>();
+            builder.Services.AddScoped<IFolderSuggestionService, FolderSuggestionService>();
+            builder.Services.AddSingleton<EmbeddingOrchestrator>();
+            builder.Services.AddSingleton<IEmbeddingOrchestrator>(sp => sp.GetRequiredService<EmbeddingOrchestrator>());
+            builder.Services.AddHostedService(sp => sp.GetRequiredService<EmbeddingOrchestrator>());
+            builder.Services.AddHostedService<FolderCentroidRecomputer>();
 
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
             {

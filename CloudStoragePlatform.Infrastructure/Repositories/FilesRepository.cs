@@ -68,6 +68,15 @@ namespace CloudStoragePlatform.Infrastructure.Repositories
             return await Task.Run(() => _db.Files.Where(f => f.UserId == _user.Id).AsEnumerable().Where(predicate).ToList());
         }
 
+        public async Task<List<Core.Domain.Entities.File>> GetFilesByIds(IEnumerable<Guid> ids)
+        {
+            if (_user == null) throw new InvalidOperationException("User context is not set.");
+            var idSet = ids.ToHashSet();
+            return await _db.Files
+                .Where(f => idSet.Contains(f.FileId) && f.UserId == _user.Id)
+                .ToListAsync();
+        }
+
         public async Task<Core.Domain.Entities.File?> UpdateFile(Core.Domain.Entities.File file, bool updateProperties, bool updateParentFolder, bool updateMetadata, bool updateSharing)
         {
             if (_user == null) throw new InvalidOperationException("User context is not set.");

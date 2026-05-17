@@ -19,13 +19,17 @@ namespace Cloud_Storage_Platform.Controllers
         private readonly IFoldersRetrievalService _foldersRetrievalService;
         private readonly IFilesRetrievalService _filesRetrievalService;
         private readonly IConfiguration _configuration;
+        private readonly ISemanticSearchService _semanticSearch;
+        private readonly IFolderSuggestionService _folderSuggestion;
 
-        public RetrievalsController(IBulkRetrievalService retrievalService, IFoldersRetrievalService foldersRetrievalService, IConfiguration configuration, IFilesRetrievalService filesRetrievalService)
+        public RetrievalsController(IBulkRetrievalService retrievalService, IFoldersRetrievalService foldersRetrievalService, IConfiguration configuration, IFilesRetrievalService filesRetrievalService, ISemanticSearchService semanticSearch, IFolderSuggestionService folderSuggestion)
         {
             _foldersRetrievalService = foldersRetrievalService;
             _configuration = configuration;
             _retrievalService = retrievalService;
             _filesRetrievalService = filesRetrievalService;
+            _semanticSearch = semanticSearch;
+            _folderSuggestion = folderSuggestion;
         }
 
 
@@ -177,6 +181,23 @@ namespace Cloud_Storage_Platform.Controllers
             string searchStringTrimmed = searchString.Trim();
             (List<FolderResponse> folders, List<FileResponse> files) res = await _retrievalService.GetAllFilteredChildren(searchStringTrimmed, sortOrder);
             return new BulkResponse { folders = res.folders, files = res.files };
+        }
+
+        [HttpGet]
+        [Route("semanticSearch")]
+        public async Task<ActionResult<BulkResponse>> SemanticSearch([ModelBinder(BinderType = typeof(RemoveInvalidFileFolderNameCharactersBinder))] string q, int topK = 20, bool hybrid = true)
+        {
+            string trimmed = (q ?? string.Empty).Trim();
+            BulkResponse result = await _semanticSearch.SearchAsync(trimmed, topK, hybrid);
+            return result;
+        }
+
+        [HttpGet]
+        [Route("suggestFolders")]
+        public async Task<ActionResult<List<FolderSuggestion>>> SuggestFolders(Guid fileId, int topK = 3)
+        {
+            var suggestions = await _folderSuggestion.SuggestFoldersForFileAsync(fileId, topK);
+            return suggestions;
         }
 
         [HttpGet]

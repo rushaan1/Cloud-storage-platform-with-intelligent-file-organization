@@ -25,13 +25,15 @@ namespace CloudStoragePlatform.Core.Services
         private readonly IServiceProvider _provider;
         private readonly UserIdentification userIdentification;
         private readonly IFilesRetrievalService _filesRetrievalService;
+        private readonly IVertexAccessTokenProvider _tokens;
 
-        public AiUpscaleProcessor(IConfiguration config, IServiceProvider serviceProvider, UserIdentification userIdentification, IFilesRetrievalService filesRetrievalService)
+        public AiUpscaleProcessor(IConfiguration config, IServiceProvider serviceProvider, UserIdentification userIdentification, IFilesRetrievalService filesRetrievalService, IVertexAccessTokenProvider tokens)
         {
             _config = config;
             _provider = serviceProvider;
             this.userIdentification = userIdentification;
             _filesRetrievalService = filesRetrievalService;
+            _tokens = tokens;
         }
 
         public async Task UpscaleDefault(Guid id)
@@ -49,9 +51,8 @@ namespace CloudStoragePlatform.Core.Services
             // Concatenate physical storage path and file id to get finalPath
             string finalPath = Path.Combine(physicalStoragePath, id.ToString());
 
-            // TODO move these details to config
-            string projectID = "cloud-storage-platform-rushaan";
-            string region = "us-central1";
+            string projectID = _config["Ai:Vertex:ProjectId"] ?? "cloud-storage-platform-rushaan";
+            string region = _config["Ai:Vertex:Region"] ?? "us-central1";
             string publisher = "google";
             string model = "imagen-4.0-upscale-preview";
 
@@ -113,37 +114,7 @@ namespace CloudStoragePlatform.Core.Services
 
         private async Task<byte[]> UpscaleImageAsyncInternal(string b64, string projectId, string location, string publisher, string modelName)
         {
-            string base64 = _config["GoogleServiceAccountJsonKey"];
-            string saJson = Encoding.UTF8.GetString(Convert.FromBase64String(base64));
-
-            using var doc = JsonDocument.Parse(saJson);
-            var root = doc.RootElement;
-
-            string clientEmail = root.GetProperty("client_email").GetString();
-            string privateKeyPem = root.GetProperty("private_key").GetString();
-
-            // 1. Creating RSA key from PEM
-            RSA rsa = RSA.Create();
-            rsa.ImportFromPem(privateKeyPem.ToCharArray()); // ImportFromPem accepts PEM including -----BEGIN PRIVATE KEY-----...
-
-
-            // 2. Build ServiceAccountCredential initializer
-            var initializer = new ServiceAccountCredential.Initializer(clientEmail)
-            {
-                Scopes = new[] { "https://www.googleapis.com/auth/cloud-platform" }
-            };
-            initializer.Key = rsa; // set RSA key to sign JWT
-
-
-            // 3. Create credential and request access token
-            var svcCred = new ServiceAccountCredential(initializer);
-            bool success = await svcCred.RequestAccessTokenAsync(CancellationToken.None);
-            if (!success) throw new Exception("Failed to get access token");
-
-            string accessToken = svcCred.Token.AccessToken;
-            Console.WriteLine("Access token length: " + accessToken.Length);
-
-
+            string accessToken = await _tokens.GetTokenAsync();
 
             // real upscale being done below:
             var endpoint = $"{location}-aiplatform.googleapis.com";
