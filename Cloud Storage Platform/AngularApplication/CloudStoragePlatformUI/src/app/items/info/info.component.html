@@ -42,8 +42,13 @@
     </div>
     <div class="sharing-info-content info-container">
       <div class="share-flex-holder">
-        <div class="share-txt">This {{folderOrFileTxt}} is not currently being shared.</div>
-        <button class="share-tab-margin btn share-btn">Create a shareable URL</button>
+        <div *ngIf="!sharingId" class="share-txt">This {{folderOrFileTxt}} is not currently being shared.</div>
+        <input *ngIf="sharingId" type="text" class="share-url-input" [value]="shareUrl" readonly disabled/>
+        <div class="share-buttons-row">
+          <button *ngIf="!sharingId" (click)="createShare()" [disabled]="shareActionInProgress" class="share-tab-margin btn share-btn">Create a shareable URL</button>
+          <button *ngIf="sharingId" (click)="copyShareUrl()" class="share-tab-margin btn share-btn">Copy URL</button>
+          <button *ngIf="sharingId" (click)="revokeShare()" [disabled]="shareActionInProgress" class="share-tab-margin btn share-btn revoke-btn">Revoke share</button>
+        </div>
       </div>
     </div>
     <div class="full-metadata-content info-container">

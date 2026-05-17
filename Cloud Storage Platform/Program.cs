@@ -55,7 +55,8 @@ namespace CloudStoragePlatform.Web
                         builder.WithOrigins("https://localhost:4200", "https://192.168.29.161:4200")
                                .AllowAnyMethod()
                                .AllowAnyHeader()
-                               .AllowCredentials();
+                               .AllowCredentials()
+                               .WithExposedHeaders("RelativePath");
                     });
             });
 

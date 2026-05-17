@@ -23,7 +23,7 @@ export class PreviewComponent implements AfterViewInit, OnDestroy, OnInit{
   PRIVATE_PREVIEW_URL = "https://localhost:7219/api/Retrievals/filePreview"
   PRIVATE_DOWNLOAD_URL = "https://localhost:7219/api/Retrievals/download"
   protected readonly FileType = FileType;
-  constructor(private cd:ChangeDetectorRef,protected router:Router, private http: HttpClient, private loader:LoadingService, protected sanitizer: DomSanitizer, private filesState:FilesStateService) {}
+  constructor(private cd:ChangeDetectorRef,protected router:Router, private http: HttpClient, private loader:LoadingService, protected sanitizer: DomSanitizer, protected filesState:FilesStateService) {}
 
   ngOnInit(): void {
     this.filesState.outsideFilesAndFoldersMode = true;

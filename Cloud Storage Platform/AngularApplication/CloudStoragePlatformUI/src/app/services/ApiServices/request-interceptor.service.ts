@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent } from '@angular/common/http';
-import {Observable, from, of, timer, take} from 'rxjs';
-import { switchMap, filter } from 'rxjs/operators';
+import { merge, Observable, timer } from 'rxjs';
+import { catchError, filter, switchMap, take, timeout } from 'rxjs/operators';
 import { Utils } from '../../Utils';
-import { AccountService } from './account.service';
-import {RefreshedService} from "../StateManagementServices/refreshed.service";
+import { RefreshedService } from '../StateManagementServices/refreshed.service';
 
 @Injectable()
 export class RequestInterceptor implements HttpInterceptor {

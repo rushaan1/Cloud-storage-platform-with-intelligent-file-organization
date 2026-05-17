@@ -3,13 +3,13 @@
   <button (click)="download()" title="Download file" class="btn">
     <i class="fa-solid fa-download"></i>
   </button>
-  <button title="Share file" class="btn">
+  <button *ngIf="!filesState.shared" (click)="router.navigate(['filemetadata',file.fileId], {queryParams:{tab:1}})" title="Share file" class="btn">
     <i class="fa-solid fa-share-nodes"></i>
   </button>
-  <button (click)="router.navigate(['filemetadata',file.fileId])" title="File metadata" class="btn">
+  <button *ngIf="!filesState.shared" (click)="router.navigate(['filemetadata',file.fileId])" title="File metadata" class="btn">
     <i class="fa-solid fa-circle-info"></i>
   </button>
-  <button (click)="window.open('https://localhost:7219/api/Retrievals/filePreview?filePath='+file.filePath, '_blank')" class="btn" *ngIf="file.fileType==FileType.Document && file.filePath.split('.')[file.filePath.split('.').length-1]=='pdf'"><i class="fa-solid fa-arrow-up-right-from-square"></i> Open full</button>
+  <button (click)="window.open('https://localhost:7219/api/Retrievals/filePreview?filePath='+file.filePath, '_blank')" class="btn" *ngIf="!filesState.shared && file.fileType==FileType.Document && file.filePath.split('.')[file.filePath.split('.').length-1]=='pdf'"><i class="fa-solid fa-arrow-up-right-from-square"></i> Open full</button>
 </div>
 <div *ngIf="file.fileName.split('.')[file.fileName.split('.').length-1] == 'txt'">
   <pre>{{ fileText }}</pre>

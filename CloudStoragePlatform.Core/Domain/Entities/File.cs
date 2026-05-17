@@ -32,7 +32,7 @@ namespace CloudStoragePlatform.Core.Domain.Entities
                 FileName = FileName,
                 FilePath = FilePath,
                 IsFavorite = IsFavorite,
-                IsTrash = IsTrash, 
+                IsTrash = IsTrash,
                 FileType = FileType,
                 Thumbnail = thumbnail,
                 Size = Size

@@ -103,6 +103,46 @@
   text-align: center;
 }
 
+.share-url-input{
+  margin-top: 50px;
+  width: 80%;
+  max-width: 600px;
+  padding: 10px 14px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid #b8b8b8;
+  background-color: #f1f1f1;
+  color: #444;
+  cursor: not-allowed;
+  text-overflow: ellipsis;
+}
+
+.share-buttons-row{
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.share-tab-margin{
+  margin-top: 20px;
+}
+
+.revoke-btn{
+  background-color: #d9534f;
+}
+
+.revoke-btn:hover{
+  background-color: #e26c68;
+}
+
+.btn:disabled, .btn[disabled]{
+  background-color: #9bb6e8;
+  cursor: not-allowed;
+}
+
 .Image {
   background: url('../item-icons/pic-icon.png');
   background-size: cover;

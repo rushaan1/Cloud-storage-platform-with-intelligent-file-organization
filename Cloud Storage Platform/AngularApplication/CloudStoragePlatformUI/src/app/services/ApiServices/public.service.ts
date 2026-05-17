@@ -56,6 +56,27 @@ export class PublicService {
   }
 
   /**
+   * Gets the share info for a file or folder, or null if not currently shared
+   * @param fileOrFolderId - The ID of the file or folder
+   * @param isFile - Whether it's a file (true) or folder (false)
+   * @returns Observable resolving to the share info or null when not shared
+   */
+  public getShare(fileOrFolderId: string, isFile: boolean): Observable<{ sharingId: string; shareLinkExpiry: string | null; shareLinkCreateDate: string | null; visits: number | null } | null> {
+    Utils.handleStringInvalidError(fileOrFolderId);
+    let params = new HttpParams()
+      .set("fileOrFolderId", fileOrFolderId)
+      .set("isFile", isFile.toString());
+    return this.httpClient.get(`${PUBLIC_BASE_URL}/GetShare`, { params, observe: 'response' }).pipe(
+      map((response: any) => {
+        if (response.status === 204 || !response.body) {
+          return null;
+        }
+        return response.body;
+      })
+    );
+  }
+
+  /**
    * Fetches shared content (file preview or folder children)
    * @param sharingId - The sharing ID
    * @param fileFolderSubjectId - The ID of the file/folder being accessed
@@ -80,10 +101,14 @@ export class PublicService {
 
         // Manually transform the response since the interceptor won't process Shares endpoints
         if (response.body && response.body.folders && response.body.files) {
-          // Combine folders and files into a single File[] array
+          // Folder subject: returns BulkResponse with folders + files
           const folders = response.body.folders.map((folder: any) => Utils.processFileModel(folder));
           const files = response.body.files.map((file: any) => Utils.processFileModel(file));
           return { files: [...folders, ...files], relativePath };
+        }
+        else if (response.body && response.body.fileId) {
+          // File subject (previewSignal=true): returns a single FileResponse
+          return { files: [], relativePath, file: Utils.processFileModel(response.body) };
         }
         else {
           return { files: [], relativePath: "" };

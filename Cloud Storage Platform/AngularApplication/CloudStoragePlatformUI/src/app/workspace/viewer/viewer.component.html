@@ -16,6 +16,11 @@
     </div>
   </div>
 
-  <file-preview *ngIf="fileBeingPreviewd!=null" [file]="fileBeingPreviewd!"></file-preview>
+  <file-preview *ngIf="fileBeingPreviewd!=null && !filesState.shared" [file]="fileBeingPreviewd!"></file-preview>
+  <file-preview *ngIf="fileBeingPreviewd!=null && filesState.shared"
+                [file]="fileBeingPreviewd!"
+                [publicfileurl]="sharedFilePreviewUrl"
+                [publicdownloadurl]="sharedFileDownloadUrl"
+                [publicfextension]="sharedFileExtension"></file-preview>
 
 </div>

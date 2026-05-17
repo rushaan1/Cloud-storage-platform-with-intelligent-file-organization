@@ -10,6 +10,7 @@ import {FileType} from "../../models/FileType";
 import {EventService} from "../../services/event-service.service";
 import {NetworkStatusService} from "../../services/network-status-service.service";
 import {BreadcrumbService} from "../../services/StateManagementServices/breadcrumb.service";
+import {PublicService} from "../../services/ApiServices/public.service";
 
 @Component({
   selector: 'info',
@@ -31,8 +32,11 @@ export class InfoComponent implements OnInit, AfterViewInit, OnDestroy{
   isFolder = false;
   folderOrFileTxt = "";
   eventSource!:EventSource;
+  sharingId: string | null = null;
+  shareUrl: string = "";
+  shareActionInProgress = false;
 
-  constructor(protected foldersService:FilesAndFoldersService, protected route:ActivatedRoute, protected router:Router, protected filesState:FilesStateService, protected  eventService:EventService, private ngZone:NgZone, private networkStatus:NetworkStatusService, protected bcService:BreadcrumbService) {}
+  constructor(protected foldersService:FilesAndFoldersService, protected route:ActivatedRoute, protected router:Router, protected filesState:FilesStateService, protected  eventService:EventService, private ngZone:NgZone, private networkStatus:NetworkStatusService, protected bcService:BreadcrumbService, protected publicService:PublicService) {}
   ngOnInit(): void {
     this.filesState.outsideFilesAndFoldersMode = true;
     this.route.paramMap.subscribe((params) => {
@@ -52,8 +56,8 @@ export class InfoComponent implements OnInit, AfterViewInit, OnDestroy{
         next: ({ folder, metadata }) => {
           this.f = folder;
           this.metadata = metadata;
-
           this.updateFavAndTrashTxts();
+          this.loadShareInfo();
         },
         error: (err) => console.error("Error fetching data", err),
       });
@@ -179,6 +183,89 @@ export class InfoComponent implements OnInit, AfterViewInit, OnDestroy{
           this.trashBtn.nativeElement.classList.remove("disabled");
           },2000);
       },
+    });
+  }
+
+  buildShareUrl(sharingId: string, subjectId: string): string {
+    return `${window.location.origin}/#/shared?shareId=${encodeURIComponent(sharingId)}&subjectId=${encodeURIComponent(subjectId)}`;
+  }
+
+  loadShareInfo(){
+    this.publicService.getShare(this.f.fileId, !this.isFolder).subscribe({
+      next: (info) => {
+        if (info && info.sharingId){
+          this.sharingId = info.sharingId;
+          this.shareUrl = this.buildShareUrl(this.sharingId, this.f.fileId);
+        } else {
+          this.sharingId = null;
+          this.shareUrl = "";
+        }
+      },
+      error: () => {
+        this.sharingId = null;
+        this.shareUrl = "";
+      }
+    });
+  }
+
+  createShare(){
+    if (!this.networkStatus.statusVal()){
+      this.eventService.emit("addNotif", ["Not connected. Please check your internet connection.", 12000]);
+      return;
+    }
+    if (this.shareActionInProgress || this.sharingId){
+      return;
+    }
+    this.shareActionInProgress = true;
+    this.publicService.createShare({fileOrFolderId: this.f.fileId, isFile: !this.isFolder}).subscribe({
+      next: (res) => {
+        this.sharingId = res.sharingId;
+        this.shareUrl = this.buildShareUrl(this.sharingId!, this.f.fileId);
+        this.eventService.emit("addNotif", ["Shareable URL created.", 8000]);
+      },
+      error: () => {
+        this.eventService.emit("addNotif", ["Failed to create shareable URL.", 8000]);
+      },
+      complete: () => {
+        this.shareActionInProgress = false;
+      }
+    });
+  }
+
+  copyShareUrl(){
+    if (!this.shareUrl){ return; }
+    if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(this.shareUrl).then(() => {
+        this.eventService.emit("addNotif", ["Shareable URL copied to clipboard.", 6000]);
+      }, () => {
+        this.eventService.emit("addNotif", ["Could not copy URL. Please copy it manually.", 8000]);
+      });
+    } else {
+      this.eventService.emit("addNotif", ["Clipboard not available. Please copy the URL manually.", 8000]);
+    }
+  }
+
+  revokeShare(){
+    if (!this.networkStatus.statusVal()){
+      this.eventService.emit("addNotif", ["Not connected. Please check your internet connection.", 12000]);
+      return;
+    }
+    if (this.shareActionInProgress || !this.sharingId){
+      return;
+    }
+    this.shareActionInProgress = true;
+    this.publicService.removeShare(this.f.fileId, !this.isFolder).subscribe({
+      next: () => {
+        this.sharingId = null;
+        this.shareUrl = "";
+        this.eventService.emit("addNotif", ["Share revoked.", 6000]);
+      },
+      error: () => {
+        this.eventService.emit("addNotif", ["Failed to revoke share.", 8000]);
+      },
+      complete: () => {
+        this.shareActionInProgress = false;
+      }
     });
   }
 

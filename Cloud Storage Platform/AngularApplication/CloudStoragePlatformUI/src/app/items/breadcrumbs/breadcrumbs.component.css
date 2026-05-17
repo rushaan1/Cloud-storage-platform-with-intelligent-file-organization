@@ -41,6 +41,10 @@
   background-color: antiquewhite;
   cursor: pointer;
 }
+.crumb-disabled, .crumb-disabled:hover{
+  background-color: transparent !important;
+  cursor: default !important;
+}
 .capitalize{
   text-transform: capitalize;
 }

@@ -14,7 +14,7 @@
     <div>Create new folder</div>
   </div>
 
-  <ul [ngStyle]="{'margin-top':!this.filesState.outsideFilesAndFoldersMode ? 'unset' : '20px'}" class="category top-category maindrawer-top">
+  <ul *ngIf="!filesState.shared" [ngStyle]="{'margin-top':!this.filesState.outsideFilesAndFoldersMode ? 'unset' : '20px'}" class="category top-category maindrawer-top">
     <li (mouseleave)="topCategoryLiHoverAway($event)" (mouseover)="topCategoryLiHover($event)" [routerLinkActive]="['active']"
         [routerLink]="['/filter/gallery']"><a [routerLinkActive]="['active']"><i
       [routerLinkActive]="['active']" class="fa-solid fa-icons"></i>Gallery</a></li>
@@ -65,7 +65,7 @@
     <div class="menu m-menu">
       <i (click)="miniDrawerClick()" class="menu-i fa-solid fa-bars"></i>
     </div>
-    <ul class="category top-category m-top-cat">
+    <ul *ngIf="!filesState.shared" class="category top-category m-top-cat">
       <li (mouseleave)="topCategoryLiHoverAway($event)" (mouseover)="topCategoryLiHover($event)" [routerLinkActive]="['active']"
           [routerLink]="['/filter/gallery']"><a [routerLinkActive]="['active']"><i
         [routerLinkActive]="['active']" class="fa-solid fa-icons"></i></a></li>

@@ -93,14 +93,16 @@ namespace CloudStoragePlatform.Infrastructure.Repositories
             }
             if (updateMetadata)
             {
-                if (!matchingFile.Metadata.Equals(file.Metadata))
+                // Use static object.Equals so a null-on-either-side comparison short-circuits cleanly
+                // instead of throwing NRE (e.g. when revoking a share blanks Metadata/Sharing).
+                if (!object.Equals(matchingFile.Metadata, file.Metadata))
                 {
                     matchingFile.Metadata = file.Metadata;
                 }
             }
             if (updateSharing)
             {
-                if (!matchingFile.Sharing.Equals(file.Sharing))
+                if (!object.Equals(matchingFile.Sharing, file.Sharing))
                 {
                     matchingFile.Sharing = file.Sharing;
                 }

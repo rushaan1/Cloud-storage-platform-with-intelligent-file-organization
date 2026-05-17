@@ -24,6 +24,7 @@ import {FileType} from "../../models/FileType";
 import {forkJoin} from "rxjs";
 import {NetworkStatusService} from "../../services/network-status-service.service";
 import {LoadingService} from "../../services/StateManagementServices/loading.service";
+import {PublicService} from "../../services/ApiServices/public.service";
 
 @Component({
   selector: 'file-item',
@@ -68,7 +69,7 @@ export class FileItemComponent implements OnInit, AfterViewInit {
   renameFocus:any;
   fileFilters: FileType[] = [];
 
-  constructor(private el: ElementRef, protected filesState: FilesStateService, protected router:Router, protected cdRef: ChangeDetectorRef, protected foldersService:FilesAndFoldersService, protected eventService: EventService, protected breadcrumbService:BreadcrumbService, private route:ActivatedRoute, private networkStatus:NetworkStatusService, private loadingService:LoadingService) { }
+  constructor(private el: ElementRef, protected filesState: FilesStateService, protected router:Router, protected cdRef: ChangeDetectorRef, protected foldersService:FilesAndFoldersService, protected eventService: EventService, protected breadcrumbService:BreadcrumbService, private route:ActivatedRoute, private networkStatus:NetworkStatusService, private loadingService:LoadingService, private publicService:PublicService) { }
 
   ngOnInit(): void {
     this.uniqueComponentIdentifierUUID = uuidv4();
@@ -183,6 +184,9 @@ export class FileItemComponent implements OnInit, AfterViewInit {
     if (this.fileOptionsVisible == false) {
       menu.style.visibility = "visible";
       menu.style.height = "240px";
+      if (this.filesState.shared){
+        menu.style.height = "38px";
+      }
       this.fileOptionsVisible = true;
       this.eventService.emit("file options expanded", this.uniqueComponentIdentifierUUID);
       this.ellipsis.nativeElement.style.backgroundColor = "lightgray";
@@ -310,6 +314,18 @@ export class FileItemComponent implements OnInit, AfterViewInit {
       return;
     }
     if (this.FileFolder.uncreated){return;}
+    if (this.filesState.shared){
+      // In shared mode, stay on /shared with the same shareId but swap subjectId
+      // to the clicked child item. The Sharing controller will resolve access.
+      const shareId = this.route.snapshot.queryParamMap.get("shareId");
+      if (!shareId){
+        return;
+      }
+      this.router.navigate(["shared"], {
+        queryParams: { shareId, subjectId: this.FileFolder.fileId }
+      });
+      return;
+    }
     if (this.FileFolder.fileType == FileType.Folder) {
       this.router.navigate(["folder", ...Utils.cleanPath(this.FileFolder.filePath)]);
     }
@@ -429,6 +445,18 @@ export class FileItemComponent implements OnInit, AfterViewInit {
   }
 
   download(){
+    if (this.filesState.shared){
+      // In shared mode the recipient may not be authenticated, so route the download
+      // through the public Shares endpoint instead of the auth-gated Retrievals one.
+      // Sharing controller resolves access via the active shareId + the clicked subjectId.
+      const shareId = this.route.snapshot.queryParamMap.get("shareId");
+      if (!shareId){
+        return;
+      }
+      const url = this.publicService.createDownloadUrl(shareId, this.FileFolder.fileId);
+      window.open(url, "_blank");
+      return;
+    }
     let url = "https://localhost:7219/api/Retrievals/download";
     if (this.FileFolder.fileType==FileType.Folder){
       url = url+"?folderIds="+this.FileFolder.fileId;

@@ -1,14 +1,16 @@
-﻿using CloudStoragePlatform.Core.ServiceContracts;
+﻿using Cloud_Storage_Platform.Filters;
+using CloudStoragePlatform.Core;
+using CloudStoragePlatform.Core.Domain.Entities;
 using CloudStoragePlatform.Core.DTO;
 using CloudStoragePlatform.Core.Enums;
+using CloudStoragePlatform.Core.ServiceContracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
 using System;
 using System.Text;
 using System.Threading.Tasks;
-using CloudStoragePlatform.Core;
-using Microsoft.AspNetCore.Authorization;
 
 namespace Cloud_Storage_Platform.Controllers
 {
@@ -27,6 +29,7 @@ namespace Cloud_Storage_Platform.Controllers
             _bulkRetrievalService = bulkRetrievalService;
         }
 
+        [ServiceFilter(typeof(IdentifyUser))]
         [HttpPost("CreateShare")]
         public async Task<IActionResult> CreateShare([FromBody] CreateShareRequest request)
         {
@@ -63,7 +66,37 @@ namespace Cloud_Storage_Platform.Controllers
         }
 
 
+        [ServiceFilter(typeof(IdentifyUser))]
+        [HttpGet("GetShare")]
+        public async Task<IActionResult> GetShare([FromQuery] Guid fileOrFolderId, [FromQuery] bool isFile)
+        {
+            try
+            {
+                Sharing? sharing = isFile
+                    ? await _sharingService.GetShareForFile(fileOrFolderId)
+                    : await _sharingService.GetShareForFolder(fileOrFolderId);
 
+                if (sharing == null)
+                {
+                    return NoContent();
+                }
+
+                return Ok(new ShareInfoResponse
+                {
+                    SharingId = sharing.SharingId,
+                    ShareLinkExpiry = sharing.ShareLinkExpiry,
+                    ShareLinkCreateDate = sharing.ShareLinkCreateDate,
+                    Visits = sharing.Visits
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "An error occurred while fetching the share", Error = ex.Message });
+            }
+        }
+
+
+        [ServiceFilter(typeof(IdentifyUser))]
         [HttpDelete("RemoveShare")]
         public async Task<IActionResult> RemoveShare([FromQuery] Guid fileOrFolderId, [FromQuery] bool isFile)
         {

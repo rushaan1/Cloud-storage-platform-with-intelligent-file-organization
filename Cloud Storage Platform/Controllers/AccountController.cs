@@ -1,4 +1,4 @@
-﻿using Azure.Core;
+using Azure.Core;
 using Castle.Core.Internal;
 using Cloud_Storage_Platform.Filters;
 using CloudStoragePlatform.Core;

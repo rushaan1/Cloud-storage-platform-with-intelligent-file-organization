@@ -105,6 +105,18 @@ namespace CloudStoragePlatform.Core.Services
             return await _sharingRepository.DeleteSharing(sharing);
         }
 
+        public async Task<Sharing?> GetShareForFile(Guid fileId)
+        {
+            var file = await _filesRepository.GetFileByFileId(fileId);
+            return file?.Sharing;
+        }
+
+        public async Task<Sharing?> GetShareForFolder(Guid folderId)
+        {
+            var folder = await _foldersRepository.GetFolderByFolderId(folderId);
+            return folder?.Sharing;
+        }
+
         public async Task<(File? file, Folder? folder, bool childFile, string relativeSubjectPath)?> ValidateShareFetchSubject(Guid sharingId, Guid fileFolderSubjectId) 
         { // subject is essentially the file/folder being fetched, it may be the shared file itself or a shared folder itself or child of a shared folder
             Sharing? share = await _sharingRepository.GetSharingById(sharingId);

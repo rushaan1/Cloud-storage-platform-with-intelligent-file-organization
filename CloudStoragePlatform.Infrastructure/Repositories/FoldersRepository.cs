@@ -99,16 +99,18 @@ namespace CloudStoragePlatform.Infrastructure.Repositories
                     }
                 }
             }
-            if (updateMetadata) 
+            if (updateMetadata)
             {
-                if (!matchingFolder.Metadata.Equals(folder.Metadata))
+                // Use static object.Equals so a null-on-either-side comparison short-circuits cleanly
+                // instead of throwing NRE (e.g. when revoking a share blanks Metadata/Sharing).
+                if (!object.Equals(matchingFolder.Metadata, folder.Metadata))
                 {
                     matchingFolder.Metadata = folder.Metadata;
                 }
             }
-            if (updateSharing) 
+            if (updateSharing)
             {
-                if (!matchingFolder.Sharing.Equals(folder.Sharing))
+                if (!object.Equals(matchingFolder.Sharing, folder.Sharing))
                 {
                     matchingFolder.Sharing = folder.Sharing;
                 }

@@ -45,6 +45,11 @@ export class ViewerComponent implements OnInit, OnDestroy{
   private sse!:EventSource;
   guidsHiddenDueToFileFilter:string[] = [];
   fileBeingPreviewd?:File|null = null;
+  sharedFilePreviewUrl?: string;
+  sharedFileDownloadUrl?: string;
+  sharedFileExtension?: string;
+  lastLoadedShareId: string | null = null;
+  lastLoadedSubjectId: string | null = null;
 
   constructor(
     private cdRef:ChangeDetectorRef,
@@ -94,6 +99,19 @@ export class ViewerComponent implements OnInit, OnDestroy{
 
       if(this.crumbs[0]=="Search Results"){
         this.handleSearchOperation();
+      }
+
+      // In shared mode, query-param-only navigation (subjectId change) won't trigger route.url —
+      // re-run the loader when the shared subject actually changes. Skip when only filter/sort
+      // params change (sort already triggers a reload via the eventService, fileFilters is
+      // applied client-side and must not refetch).
+      const currentTopSegment = this.router.url.split("?")[0].split("/").filter(s => s.length > 0)[0];
+      if (currentTopSegment === "shared" && this.appUrl[0] === "shared") {
+        const sId = params["shareId"] ?? null;
+        const subId = params["subjectId"] ?? null;
+        if (sId && subId && (sId !== this.lastLoadedShareId || subId !== this.lastLoadedSubjectId)) {
+          this.handleFolderLoaders();
+        }
       }
     }));
 
@@ -156,7 +174,11 @@ export class ViewerComponent implements OnInit, OnDestroy{
 
     // send req to sever, get the token to access sse, establish sse connection & listening
 
-    // TODO Do not establish SSE in case of shared viewing
+    // Do not establish SSE in case of shared viewing (unauthenticated, won't have a session)
+    if (this.router.url.split("?")[0].split("/").filter(s => s.length > 0)[0] === "shared") {
+      return;
+    }
+
     this.foldersService.ssetoken().subscribe({
       next: (res) => {
         this.sse = new EventSource('https://localhost:7219/api/Modifications/sse?token=' + res.sseToken);
@@ -354,6 +376,11 @@ export class ViewerComponent implements OnInit, OnDestroy{
     this.breadcrumbService.setBreadcrumbs(this.crumbs);
     this.loaderService.loadingStart();
     this.filesState.fileOpened = false;
+    if (appUrl[0] !== "shared"){
+      this.filesState.shared = false;
+      this.lastLoadedShareId = null;
+      this.lastLoadedSubjectId = null;
+    }
     switch(appUrl[0]){
       case "filter":
         if (appUrl[1]){
@@ -429,55 +456,71 @@ export class ViewerComponent implements OnInit, OnDestroy{
         this.crumbs = ["Search Results"];
         this.handleSearchOperation();
         break;
-      case "shared":
+      case "shared": {
         // CRUMBS SET
+        this.filesState.shared = true;
         this.breadcrumbService.setBreadcrumbs(["Shared", "Loading..."]);
         this.crumbs = ["Shared", "Loading..."];
 
-        // Extract share ID and subject ID from URL
-        if (appUrl.length >= 3) {
-          const shareId = appUrl[1];
-          const subjectId = appUrl[2];
+        // Extract share ID and subject ID from query params
+        const qp = this.route.snapshot.queryParamMap;
+        const shareId = qp.get("shareId");
+        const subjectId = qp.get("subjectId");
 
-          // Get sort order from localStorage like other bulk requests
-          const sortVal = localStorage.getItem("sort")?.toString();
+        if (shareId && subjectId) {
+          // Sort comes from localStorage as a numeric string ("0".."7") that maps directly
+          // to SortOrderOptions. The previous Object.values(...).find(v => v === sortVal)
+          // never matched (numeric enum + string compare), so the request always defaulted
+          // to DATEADDED_ASCENDING — that's why sorting "did nothing" in shared mode.
+          const sortVal = localStorage.getItem("sort");
           let sortOrder = SortOrderOptions.DATEADDED_ASCENDING;
-          if (sortVal) {
-            // Convert string to SortOrderOptions enum
-            const enumValue = Object.values(SortOrderOptions).find(value => value === sortVal);
-            if (enumValue) {
-              sortOrder = enumValue as SortOrderOptions;
+          if (sortVal !== null && sortVal !== "") {
+            const parsed = parseInt(sortVal, 10);
+            if (!isNaN(parsed) && parsed >= 0 && parsed <= 7) {
+              sortOrder = parsed as SortOrderOptions;
             }
           }
+
+          this.lastLoadedShareId = shareId;
+          this.lastLoadedSubjectId = subjectId;
 
           // Call public service to get shared content
           this.publicService.fetchSharedContent(shareId, subjectId, sortOrder).subscribe({
             next: (response) => {
-              // Check if response has files array
-              this.filesState.shared = true;
-              if (response.files && response.files.length > 0) {
-                this.filesState.setFilesInViewer(response.files);
-                this.filterOutFoldersBeingMoved();
-
-                // Process relative path for breadcrumbs
-                let breadcrumbs = ["Shared"];
-                if (response.relativePath) {
-                  // Split the relative path and add to breadcrumbs
-                  const pathParts = response.relativePath.split('\\').filter(part => part.length > 0);
-                  breadcrumbs = ["Shared", ...pathParts];
-                }
-
-                this.breadcrumbService.setBreadcrumbs(["Shared"]);
-                this.crumbs = breadcrumbs;
+              if (response.file) {
+                // Shared subject is a single file — render preview
+                this.fileBeingPreviewd = response.file;
+                this.sharedFilePreviewUrl = this.publicService.createPreviewUrl(shareId, subjectId);
+                this.sharedFileDownloadUrl = this.publicService.createDownloadUrl(shareId, subjectId);
+                this.sharedFileExtension = response.file.fileName.includes('.')
+                  ? response.file.fileName.split('.').pop() || ''
+                  : '';
+                this.filesState.fileOpened = true;
+                this.filesState.setFilesInViewer([]);
               } else {
-                // No files returned, set basic breadcrumbs
-                this.breadcrumbService.setBreadcrumbs(["Shared"]);
-                this.crumbs = ["Shared"];
+                this.fileBeingPreviewd = null;
+                this.sharedFilePreviewUrl = undefined;
+                this.sharedFileDownloadUrl = undefined;
+                this.sharedFileExtension = undefined;
+                this.filesState.fileOpened = false;
+                this.filesState.setFilesInViewer(response.files ?? []);
+                this.filterOutFoldersBeingMoved();
               }
+
+              // Build breadcrumbs from the decoded relativePath returned by the service
+              let breadcrumbs: string[] = ["Shared"];
+              if (response.relativePath) {
+                const pathParts = response.relativePath.split('\\').filter(part => part.length > 0);
+                breadcrumbs = ["Shared", ...pathParts];
+              }
+              this.breadcrumbService.setBreadcrumbs(breadcrumbs);
+              this.crumbs = breadcrumbs;
             },
             error: (error) => {
               this.loaderService.loadingEnd();
               console.error('Error fetching shared content:', error);
+              this.breadcrumbService.setBreadcrumbs(["Shared", "Not available"]);
+              this.crumbs = ["Shared", "Not available"];
             },
             complete: () => {
               this.loaderService.loadingEnd();
@@ -492,12 +535,16 @@ export class ViewerComponent implements OnInit, OnDestroy{
           this.router.navigate(["filter", "home"]);
         }
         break;
+      }
       default:
         this.router.navigate(["filter", "home"]);
         break;
     }
-    if (appUrl[0]!="preview"){
+    if (appUrl[0]!="preview" && appUrl[0]!="shared"){
       this.fileBeingPreviewd = null;
+      this.sharedFilePreviewUrl = undefined;
+      this.sharedFileDownloadUrl = undefined;
+      this.sharedFileExtension = undefined;
     }
   }
 

@@ -134,7 +134,10 @@ export class NavigationDrawerComponent implements OnInit {
       li.style.backgroundColor = "";
     }
 
-    this.router.navigate([], {relativeTo:this.route, replaceUrl: true, queryParams:{fileFilters:this.selectedTypeItems}});
+    // Merge so shareId/subjectId (or any other context params) survive a filter toggle.
+    // Without merge, navigating to /shared without those params trips the auth-gated default
+    // branch and bounces the viewer to the login screen.
+    this.router.navigate([], {relativeTo:this.route, replaceUrl: true, queryParams:{fileFilters:this.selectedTypeItems}, queryParamsHandling: 'merge'});
   }
 
   typeItemSelectedMini(event: MouseEvent, name: string, liIndex: number) {
@@ -190,7 +193,9 @@ export class NavigationDrawerComponent implements OnInit {
 
   visibilityToggle(navDrawer: HTMLElement, visibility: string) {
     navDrawer.style.visibility = visibility;
-    (document.getElementsByClassName("maindrawer-top")[0] as HTMLElement).style.visibility = visibility;
+    if (!this.filesState.shared){
+      (document.getElementsByClassName("maindrawer-top")[0] as HTMLElement).style.visibility = visibility;
+    }
     if ((document.getElementsByClassName("maindrawer-bottom")[0] as HTMLElement)){
       (document.getElementsByClassName("maindrawer-bottom")[0] as HTMLElement).style.visibility = visibility;
     }

@@ -22,7 +22,7 @@ namespace CloudStoragePlatform.Core.Domain.Entities
         public virtual ICollection<Folder> SubFolders { get; set; } = new List<Folder>();
         public virtual ICollection<File> Files { get; set; } = new List<File>();
 
-        public FolderResponse ToFolderResponse() 
+        public FolderResponse ToFolderResponse()
         {
             return new FolderResponse()
             {

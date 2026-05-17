@@ -24,7 +24,7 @@
       <ng-container *ngIf="!(windowWidth < 715 && mobileSearchActive)">
         <input #uploadInputHidden (change)="onFileSelected($event)" type="file" multiple hidden>
 
-        <div (mouseenter)="uploadOptionsVisible=true" (mouseleave)="uploadOptionsVisible=false" class="upload-container">
+        <div *ngIf="!filesState.shared" (mouseenter)="uploadOptionsVisible=true" (mouseleave)="uploadOptionsVisible=false" class="upload-container">
           <button class="upload">
             <i *ngIf="windowWidth > 340; else uploadIconForNarrowScreen" class="fa-solid fa-arrow-up"></i>
             <ng-template #uploadIconForNarrowScreen>

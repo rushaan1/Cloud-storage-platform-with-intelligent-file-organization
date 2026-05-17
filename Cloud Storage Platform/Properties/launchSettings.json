@@ -8,7 +8,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "dotnetRunMessages": true,
-      "applicationUrl": "https://localhost:7219;http://localhost:5141;https://cloudstoraeg.azurewebsites.net"
+      "applicationUrl": "https://localhost:7219;http://localhost:5141"
     },
     "IIS Express": {
       "commandName": "IISExpress",
@@ -23,7 +23,7 @@
       "launchBrowser": true,
       "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/swagger",
       "environmentVariables": {
-        "ASPNETCORE_URLS": "http://+:80;https://cloudstoraeg.azurewebsites.net"
+        "ASPNETCORE_URLS": "http://+:80"
       },
       "publishAllPorts": true,
       "useSSL": true
@@ -34,7 +34,7 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:50236;https://cloudstoraeg.azurewebsites.net",
+      "applicationUrl": "http://localhost:50236;",
       "sslPort": 44373
     }
   }
