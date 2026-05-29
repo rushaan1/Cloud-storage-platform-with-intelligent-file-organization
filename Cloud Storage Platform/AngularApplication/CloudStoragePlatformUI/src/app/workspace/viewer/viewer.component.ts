@@ -22,6 +22,7 @@ import {BehaviorSubject, fromEvent, mapTo, skip, Subscription} from "rxjs";
 import {FileType} from "../../models/FileType";
 import {map} from "rxjs/operators";
 import {NetworkStatusService} from "../../services/network-status-service.service";
+import {SmartSuggestionService} from "../../services/StateManagementServices/smart-suggestion.service";
 
 @Component({
   selector: 'viewer',
@@ -62,7 +63,8 @@ export class ViewerComponent implements OnInit, OnDestroy{
     private breadcrumbService:BreadcrumbService,
     protected filesState:FilesStateService,
     private ngZone: NgZone,
-    private networkStatusService:NetworkStatusService) {}
+    private networkStatusService:NetworkStatusService,
+    private smartSuggestions:SmartSuggestionService) {}
 
   ngOnInit(): void {
     this.filesState.setUncreatedFolderExists(false);
@@ -337,6 +339,27 @@ export class ViewerComponent implements OnInit, OnDestroy{
                   console.log("in state:");
                   console.log(this.filesState.getFilesInViewer());
                 }
+                break;
+              case "embedded":
+                // File is now searchable via semantic search. (No visible UI change in v1 — just a debug log.)
+                console.log("File embedded and searchable: " + data.content.fileId);
+                break;
+              case "folder_suggestion":
+                // Smart upload: backend thinks this file might fit better elsewhere.
+                // Push into the bottom-right suggestion overlay; entries append per file.
+                if (data.content && data.content.suggestions && data.content.suggestions.length > 0) {
+                  this.smartSuggestions.addSuggestion(
+                    data.content.fileId,
+                    data.content.fileName || "(file)",
+                    data.content.suggestions.map((s:any) => ({
+                      folderId: s.folderId,
+                      folderPath: s.folderPath,
+                      folderName: s.folderName,
+                      score: s.score
+                    }))
+                  );
+                }
+                break;
             }
             this.cdRef.detectChanges();
 
@@ -637,13 +660,28 @@ export class ViewerComponent implements OnInit, OnDestroy{
   handleSearchOperation(){
     if (Utils.validString(this.searchQuery)){
       this.loaderService.loadingStart();
-      this.foldersService.getFilteredFolders(this.searchQuery!).subscribe({
+      this.foldersService.semanticSearch(this.searchQuery!).subscribe({
         next: res => {
           this.filesState.setFilesInViewer(res);
           this.filterOutFoldersBeingMoved();
         },
         error: err => {
-          this.loaderService.loadingEnd();
+          // Semantic search failed (Pinecone/Vertex down, quota, etc.).
+          // Fall back to legacy name-substring search so the user still gets results.
+          this.foldersService.getFilteredFolders(this.searchQuery!).subscribe({
+            next: res => {
+              this.filesState.setFilesInViewer(res);
+              this.filterOutFoldersBeingMoved();
+              this.eventService.emit("addNotif", ["Showing name matches only (smart search unavailable)", 4000]);
+            },
+            error: () => {
+              this.loaderService.loadingEnd();
+            },
+            complete: () => {
+              this.loaderService.loadingEnd();
+              this.handleEmptyTxt("No search results match "+this.searchQuery);
+            }
+          });
         },
         complete: () => {
           this.loaderService.loadingEnd();

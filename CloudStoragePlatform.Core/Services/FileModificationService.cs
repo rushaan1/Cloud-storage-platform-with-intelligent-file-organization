@@ -25,8 +25,9 @@ namespace CloudStoragePlatform.Core.Services
         private readonly UserIdentification _ui;
         private readonly ThumbnailService _thumbnailService;
         private readonly IConfiguration _config;
+        private readonly IFileEmbeddingSync _embeddingSync;
 
-        public FileModificationService(IFoldersRepository foldersRepository, IFilesRepository filesRepository, SSE sse, UserBasicInfo userBasicInfo, UserIdentification ui, ThumbnailService thumbnailService, IConfiguration config)
+        public FileModificationService(IFoldersRepository foldersRepository, IFilesRepository filesRepository, SSE sse, UserBasicInfo userBasicInfo, UserIdentification ui, ThumbnailService thumbnailService, IConfiguration config, IFileEmbeddingSync embeddingSync)
         {
             _foldersRepository = foldersRepository;
             _filesRepository = filesRepository;
@@ -35,6 +36,7 @@ namespace CloudStoragePlatform.Core.Services
             _ui = ui;
             _thumbnailService = thumbnailService;
             _config = config;
+            _embeddingSync = embeddingSync;
         }
 
         public async Task<FileResponse> UploadFile(FileAddRequest fileAddRequest, Stream stream)
@@ -117,6 +119,12 @@ namespace CloudStoragePlatform.Core.Services
             {
                 await _thumbnailService.GenerateVideoThumbnail(file.FileId, file.FilePath);
             }
+
+            if (_ui.User != null)
+            {
+                await _embeddingSync.EnqueueOnCreate(file.FileId, _ui.User.Id);
+            }
+
             var response = file.ToFileResponse(_thumbnailService.GetThumbnail(file.FileId));
             return response;
         }
@@ -147,11 +155,11 @@ namespace CloudStoragePlatform.Core.Services
             file.IsTrash = !file.IsTrash;
 
             var updatedFile = await _filesRepository.UpdateFile(file, true, false, false, false);
-            
+
             // Get the parent folder and file size
             Folder? parentFolder = file.ParentFolder;
             float fileSizeInMB = file.Size;
-            
+
             // If file is being added to trash, subtract size from ancestors
             if (!wasInTrash && file.IsTrash && parentFolder != null)
             {
@@ -162,7 +170,12 @@ namespace CloudStoragePlatform.Core.Services
             {
                 await UpdateFolderSizesOnIncrease(parentFolder, fileSizeInMB);
             }
-            
+
+            if (_ui.User != null)
+            {
+                await _embeddingSync.UpdateMetadataOnTrash(file.FileId, file.IsTrash, file.ParentFolderId, _ui.User.Id);
+            }
+
             return updatedFile!.ToFileResponse(_thumbnailService.GetThumbnail(updatedFile.FileId));
         }
 
@@ -173,14 +186,20 @@ namespace CloudStoragePlatform.Core.Services
             {
                 throw new ArgumentException();
             }
-            
+
             // Get the parent folder and file size before deleting
             Folder? parentFolder = file.ParentFolder;
             float fileSizeInMB = file.Size;
-            
+            Guid parentFolderIdForEmbedding = file.ParentFolderId;
+
             // Delete the file from the file system
             System.IO.File.Delete(Path.Combine(_ui.PhysicalStoragePath, file.FileId.ToString()));
-            
+
+            if (_ui.User != null)
+            {
+                await _embeddingSync.DeleteOnHardDelete(file.FileId, parentFolderIdForEmbedding, _ui.User.Id);
+            }
+
             // Delete the file from database
             bool result = await _filesRepository.DeleteFile(file);
             
@@ -225,17 +244,22 @@ namespace CloudStoragePlatform.Core.Services
 
             File? finalMainFile = await _filesRepository.UpdateFile(file, true, true, false, false);
             await Utilities.UpdateMetadataMove(file, previousFilePath, _filesRepository);
-            
+
             // Update folder sizes if the parent folder changes
             if (oldParent != null && newParent != null && oldParent.FolderId != newParent.FolderId)
             {
                 // Decrease size from old parent
                 await UpdateFolderSizesOnDecrease(oldParent, fileSizeInMB);
-                
+
                 // Increase size for new parent
                 await UpdateFolderSizesOnIncrease(newParent, fileSizeInMB);
             }
-            
+
+            if (_ui.User != null && oldParent != null && newParent != null)
+            {
+                await _embeddingSync.UpdateMetadataOnMove(file.FileId, newParent.FolderId, newParent.FolderPath, oldParent.FolderId, _ui.User.Id);
+            }
+
             var response = finalMainFile!.ToFileResponse(_thumbnailService.GetThumbnail(finalMainFile.FileId));
             return response;
         }
@@ -261,6 +285,12 @@ namespace CloudStoragePlatform.Core.Services
 
             await Utilities.UpdateMetadataRename(file, _filesRepository);
             var updatedFile = await _filesRepository.UpdateFile(file, true, false, false, false);
+
+            if (_ui.User != null)
+            {
+                await _embeddingSync.EnqueueOnRename(file.FileId, _ui.User.Id);
+            }
+
             return updatedFile!.ToFileResponse(_thumbnailService.GetThumbnail(updatedFile.FileId));
         }
 

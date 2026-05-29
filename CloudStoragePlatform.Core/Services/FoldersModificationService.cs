@@ -22,7 +22,8 @@ namespace CloudStoragePlatform.Core.Services
         private readonly UserBasicInfo _userBasicInfo;
         private readonly UserIdentification _ui;
         private readonly IConfiguration _config;
-        public FoldersModificationService(IFoldersRepository foldersRepository, IFilesRepository filesRepository, SSE sse, UserBasicInfo userBasicInfo, UserIdentification ui, IConfiguration config) 
+        private readonly IFileEmbeddingSync _embeddingSync;
+        public FoldersModificationService(IFoldersRepository foldersRepository, IFilesRepository filesRepository, SSE sse, UserBasicInfo userBasicInfo, UserIdentification ui, IConfiguration config, IFileEmbeddingSync embeddingSync)
         {
             _foldersRepository = foldersRepository;
             _filesRepository = filesRepository;
@@ -30,6 +31,7 @@ namespace CloudStoragePlatform.Core.Services
             _userBasicInfo = userBasicInfo;
             _ui = ui;
             _config = config;
+            _embeddingSync = embeddingSync;
         }
         public async Task del() 
         {
@@ -158,25 +160,36 @@ namespace CloudStoragePlatform.Core.Services
             {
                 await UpdateFolderSizesOnIncrease(parentFolder, folderSizeInMB);
             }
-            
+
+            if (_ui.User != null)
+            {
+                await _embeddingSync.CascadeFolderTrash(folder.FolderId, folder.IsTrash, _ui.User.Id);
+            }
+
             return updatedFolder!.ToFolderResponse();
         }
 
         public async Task<bool> DeleteFolder(Guid fid)
         {
             Folder? folder = await _foldersRepository.GetFolderByFolderId(fid);
-            if (folder == null) 
+            if (folder == null)
             {
                 throw new ArgumentException();
             }
-            
+
             // Store parent folder and folder size before deletion
             //Folder? parentFolder = folder.ParentFolder;
             //float folderSizeInMB = folder.Size;
-            
+
             // Delete the folder from filesystem
-            
-            
+
+
+            // Cascade Pinecone deletions BEFORE SQL deletion (we need to walk navigation properties)
+            if (_ui.User != null)
+            {
+                await _embeddingSync.CascadeFolderDelete(folder.FolderId, _ui.User.Id);
+            }
+
             // Delete from database
             bool result = await _foldersRepository.DeleteFolder(folder);
             

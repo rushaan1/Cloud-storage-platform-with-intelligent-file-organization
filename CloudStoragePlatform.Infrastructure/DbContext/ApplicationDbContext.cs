@@ -17,6 +17,8 @@ namespace CloudStoragePlatform.Infrastructure.DbContext
         public DbSet<Sharing> Shares { get; set; }
         public DbSet<Metadata> MetaDatasets { get; set; }
         public DbSet<UserSession> UserSessions { get; set; }
+        public DbSet<FileEmbedding> FileEmbeddings { get; set; }
+        public DbSet<FolderEmbedding> FolderEmbeddings { get; set; }
         public ApplicationDbContext(DbContextOptions options) : base(options) {}
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -98,6 +100,38 @@ namespace CloudStoragePlatform.Infrastructure.DbContext
                 .WithOne(f => f.User)
                 .HasForeignKey(f => f.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<FileEmbedding>().ToTable("FileEmbeddings");
+            modelBuilder.Entity<FolderEmbedding>().ToTable("FolderEmbeddings");
+
+            modelBuilder.Entity<FileEmbedding>()
+                .HasOne(e => e.File)
+                .WithOne()
+                .HasForeignKey<FileEmbedding>(e => e.FileId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<FileEmbedding>()
+                .HasIndex(e => e.FileId)
+                .IsUnique();
+
+            modelBuilder.Entity<FileEmbedding>()
+                .HasIndex(e => e.Status);
+
+            modelBuilder.Entity<FileEmbedding>()
+                .HasIndex(e => e.UserId);
+
+            modelBuilder.Entity<FolderEmbedding>()
+                .HasOne(e => e.Folder)
+                .WithOne()
+                .HasForeignKey<FolderEmbedding>(e => e.FolderId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<FolderEmbedding>()
+                .HasIndex(e => e.FolderId)
+                .IsUnique();
+
+            modelBuilder.Entity<FolderEmbedding>()
+                .HasIndex(e => new { e.UserId, e.IsStale });
         }
     }
 }

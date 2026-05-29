@@ -12,7 +12,7 @@ export class ResponseInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(req).pipe(
       map((event: HttpEvent<any>) => {
-        let exceptions = ['filepreview', 'sseauth'];
+        let exceptions = ['filepreview', 'sseauth', 'suggestfolders'];
         const containsExceptions:boolean = exceptions.some(exception => req.url.toLowerCase().includes(exception));
         if (event instanceof HttpResponse && !containsExceptions && (req.url.toLowerCase().includes('retrievals')||req.url.toLowerCase().includes('modifications')) && event.status == 200) {
           return event.clone({

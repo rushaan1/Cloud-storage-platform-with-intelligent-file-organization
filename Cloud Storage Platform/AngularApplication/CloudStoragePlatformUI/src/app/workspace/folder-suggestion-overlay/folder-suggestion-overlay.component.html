@@ -1,0 +1,47 @@
+<div class="suggestion-overlay" *ngIf="entries.length > 0">
+  <div class="suggestion-header">
+    <span class="title">
+      <i class="fa-solid fa-lightbulb"></i>
+      Smart suggestions ({{ entries.length }})
+    </span>
+    <span class="header-actions">
+      <button class="btn-link" (click)="acceptAll()" title="Move every file to its selected folder">Accept all</button>
+      <i class="fa-solid" [ngClass]="collapsed ? 'fa-chevron-up' : 'fa-chevron-down'" (click)="toggleCollapse()" [title]="collapsed ? 'Expand' : 'Collapse'"></i>
+      <i class="fa-solid fa-xmark" (click)="dismissAll()" title="Dismiss all"></i>
+    </span>
+  </div>
+
+  <div class="suggestion-body" *ngIf="!collapsed">
+    <div class="suggestion-card" *ngFor="let entry of entries; trackBy: trackByFileId">
+      <div class="card-top">
+        <span class="file-name" [title]="entry.fileName">
+          <i class="fa-solid fa-file"></i> {{ entry.fileName }}
+        </span>
+        <i class="fa-solid fa-xmark dismiss-one" (click)="dismiss(entry)" title="Dismiss"></i>
+      </div>
+
+      <div class="suggested-label">Move to:</div>
+
+      <div class="options">
+        <label class="option"
+               *ngFor="let opt of entry.options"
+               [class.selected]="opt.folderId === entry.selectedFolderId">
+          <input type="radio"
+                 [name]="'sel-' + entry.fileId"
+                 [checked]="opt.folderId === entry.selectedFolderId"
+                 (change)="onSelectFolder(entry, opt.folderId)">
+          <span class="opt-name" [title]="displayPath(opt.folderPath)">
+            <i class="fa-solid fa-folder"></i> {{ opt.folderName }}
+          </span>
+          <span class="opt-score">{{ (opt.score * 100) | number:'1.0-0' }}%</span>
+        </label>
+      </div>
+
+      <div class="card-actions">
+        <button class="accept-btn" [disabled]="entry.accepting" (click)="accept(entry)">
+          {{ entry.accepting ? 'Moving…' : 'Accept' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

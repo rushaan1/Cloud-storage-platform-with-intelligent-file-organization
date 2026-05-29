@@ -8,6 +8,7 @@ import { NotificationCenterComponent } from './notification-center/notification-
 import {AccountModule} from "./account/account.module";
 import {HTTP_INTERCEPTORS} from "@angular/common/http";
 import {RequestInterceptor} from "./services/ApiServices/request-interceptor.service";
+import {FolderSuggestionOverlayComponent} from "./workspace/folder-suggestion-overlay/folder-suggestion-overlay.component";
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import {RequestInterceptor} from "./services/ApiServices/request-interceptor.ser
     BrowserModule,
     AppRoutingModule,
     WorkspaceModule,
-    AccountModule
+    AccountModule,
+    FolderSuggestionOverlayComponent
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: RequestInterceptor, multi: true}
