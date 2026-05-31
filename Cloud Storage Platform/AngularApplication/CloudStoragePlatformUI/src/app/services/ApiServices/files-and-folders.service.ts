@@ -133,8 +133,8 @@ public batchAddFolders(paths: string[]): Observable<any> {
   return this.httpClient.post(`${MODIFICATION_BASE_URL}/batchFoldersAdd`, paths);
 }
 
-public uploadFile(formData: FormData): Observable<any> {
-  return this.httpClient.post(`${MODIFICATION_BASE_URL}/upload`, formData, {
+public uploadFile(formData: FormData, partOfFolderUpload: boolean = false): Observable<any> {
+  return this.httpClient.post(`${MODIFICATION_BASE_URL}/upload?partOfFolderUpload=${partOfFolderUpload}`, formData, {
     reportProgress: true,
     observe: 'events'
   });

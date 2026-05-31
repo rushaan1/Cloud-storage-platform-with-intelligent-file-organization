@@ -311,7 +311,7 @@ export class PanelComponent implements OnInit, AfterViewChecked {
       });
       this.reportProgress();
       localStorage.setItem("filesUploadedQty", files.length.toString());
-      this.filesService.uploadFile(formData).pipe(finalize(() => {
+      this.filesService.uploadFile(formData, !onlyFiles).pipe(finalize(() => {
         this.uploadInputHidden.nativeElement.value = "";
       })).subscribe({
         next: (event) => {

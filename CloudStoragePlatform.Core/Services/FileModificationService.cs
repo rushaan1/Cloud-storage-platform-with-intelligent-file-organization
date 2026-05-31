@@ -39,7 +39,7 @@ namespace CloudStoragePlatform.Core.Services
             _embeddingSync = embeddingSync;
         }
 
-        public async Task<FileResponse> UploadFile(FileAddRequest fileAddRequest, Stream stream)
+        public async Task<FileResponse> UploadFile(FileAddRequest fileAddRequest, Stream stream, bool partOfFolderUpload = false)
         {
             string parentFolderPath = Utilities.ReplaceLastOccurance(fileAddRequest.FilePath, @"\" + fileAddRequest.FileName, "");
             File? file = null;
@@ -122,7 +122,8 @@ namespace CloudStoragePlatform.Core.Services
 
             if (_ui.User != null)
             {
-                await _embeddingSync.EnqueueOnCreate(file.FileId, _ui.User.Id);
+                // Folder uploads are pre-organized by the user, so don't pester them with move suggestions.
+                await _embeddingSync.EnqueueOnCreate(file.FileId, _ui.User.Id, partOfFolderUpload);
             }
 
             var response = file.ToFileResponse(_thumbnailService.GetThumbnail(file.FileId));

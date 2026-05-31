@@ -55,7 +55,7 @@ namespace Cloud_Storage_Platform.Controllers
         [HttpPost]
         [Route("upload")]
         [DisableFormValueModelBinding]
-        public async Task<ActionResult<List<FileResponse>>> UploadFiles()
+        public async Task<ActionResult<List<FileResponse>>> UploadFiles([FromQuery] bool partOfFolderUpload = false)
         {
             var boundary = GetBoundary(MediaTypeHeaderValue.Parse(Request.ContentType));
             var multipartReader = new MultipartReader(boundary, Request.Body);
@@ -99,7 +99,7 @@ namespace Cloud_Storage_Platform.Controllers
                         var fileSection = section.AsFileSection();
                         if (fileSection is not null && fileSection.FileStream is not null)
                         {
-                            res.Add(await _filesModificationService.UploadFile(fileRequests.ElementAt(uploadIndex), fileSection.FileStream));
+                            res.Add(await _filesModificationService.UploadFile(fileRequests.ElementAt(uploadIndex), fileSection.FileStream, partOfFolderUpload));
                         }
                         uploadIndex++;
                     }

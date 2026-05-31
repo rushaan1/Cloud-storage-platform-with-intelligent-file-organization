@@ -193,24 +193,27 @@ namespace CloudStoragePlatform.Core.Services.Ai
                 await sse.SendEventAsync("embedded", new { fileId = file.FileId }, user.Id);
                 _logger.LogInformation("Embedded FileId={FileId} (reason={Reason}, attempt={Attempt})", file.FileId, job.Reason, emb.AttemptCount);
 
-                try
+                if (!job.SuppressSuggestion)
                 {
-                    var suggestionSvc = sp.GetRequiredService<IFolderSuggestionService>();
-                    var suggestions = await suggestionSvc.SuggestFoldersForVectorAsync(vector, file.ParentFolderId, user.Id, 3, ct);
-                    if (suggestions.Count > 0)
+                    try
                     {
-                        await sse.SendEventAsync("folder_suggestion", new
+                        var suggestionSvc = sp.GetRequiredService<IFolderSuggestionService>();
+                        var suggestions = await suggestionSvc.SuggestFoldersForVectorAsync(vector, file.ParentFolderId, user.Id, 3, ct);
+                        if (suggestions.Count > 0)
                         {
-                            fileId = file.FileId,
-                            fileName = file.FileName,
-                            suggestions = suggestions.Select(s => new { folderId = s.FolderId, folderPath = s.FolderPath, folderName = s.FolderName, score = s.Score }).ToList()
-                        }, user.Id);
-                        _logger.LogInformation("Sent folder_suggestion for FileId={FileId} with {Count} candidates", file.FileId, suggestions.Count);
+                            await sse.SendEventAsync("folder_suggestion", new
+                            {
+                                fileId = file.FileId,
+                                fileName = file.FileName,
+                                suggestions = suggestions.Select(s => new { folderId = s.FolderId, folderPath = s.FolderPath, folderName = s.FolderName, score = s.Score }).ToList()
+                            }, user.Id);
+                            _logger.LogInformation("Sent folder_suggestion for FileId={FileId} with {Count} candidates", file.FileId, suggestions.Count);
+                        }
                     }
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogWarning(ex, "Folder suggestion failed for FileId={FileId}", file.FileId);
+                    catch (Exception ex)
+                    {
+                        _logger.LogWarning(ex, "Folder suggestion failed for FileId={FileId}", file.FileId);
+                    }
                 }
             }
             catch (Exception ex)

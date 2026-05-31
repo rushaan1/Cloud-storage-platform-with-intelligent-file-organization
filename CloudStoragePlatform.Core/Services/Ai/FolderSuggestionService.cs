@@ -13,6 +13,7 @@ namespace CloudStoragePlatform.Core.Services.Ai
         private readonly IPineconeClient _pinecone;
         private readonly IFilesRepository _filesRepo;
         private readonly IFoldersRepository _foldersRepo;
+        private readonly IFolderEmbeddingRepository _folderEmbRepo;
         private readonly IContentExtractor _extractor;
         private readonly UserIdentification _ui;
         private readonly IConfiguration _config;
@@ -23,6 +24,7 @@ namespace CloudStoragePlatform.Core.Services.Ai
             IPineconeClient pinecone,
             IFilesRepository filesRepo,
             IFoldersRepository foldersRepo,
+            IFolderEmbeddingRepository folderEmbRepo,
             IContentExtractor extractor,
             UserIdentification ui,
             IConfiguration config,
@@ -32,6 +34,7 @@ namespace CloudStoragePlatform.Core.Services.Ai
             _pinecone = pinecone;
             _filesRepo = filesRepo;
             _foldersRepo = foldersRepo;
+            _folderEmbRepo = folderEmbRepo;
             _extractor = extractor;
             _ui = ui;
             _config = config;
@@ -77,6 +80,25 @@ namespace CloudStoragePlatform.Core.Services.Ai
         {
             float minScore = float.TryParse(_config["Ai:Suggestion:MinScore"], out var ms) ? ms : 0.5f;
             float margin = float.TryParse(_config["Ai:Suggestion:Margin"], out var mg) ? mg : 0.1f;
+            int minFolderFiles = int.TryParse(_config["Ai:Suggestion:MinFolderFiles"], out var mf) ? mf : 5;
+
+            string homeFolderPath = Path.Combine(_config["InitialPathForStorage"] ?? string.Empty, "home");
+
+            // Identify the upload destination (current parent) and whether it is the root home folder.
+            var parent = await _foldersRepo.GetFolderByFolderId(currentParentFolderId);
+            bool parentIsHome = parent != null && string.Equals(parent.FolderPath, homeFolderPath, StringComparison.OrdinalIgnoreCase);
+
+            // When uploading into a specific (non-home) folder, only suggest a different home for the file
+            // if that destination folder is well-established: >= N live files AND its centroid was computed from >= N files.
+            if (!parentIsHome)
+            {
+                if (parent == null) return new List<FolderSuggestion>();
+                int liveFileCount = parent.Files.Count(f => !f.IsTrash);
+                var parentEmb = await _folderEmbRepo.GetByFolderId(currentParentFolderId);
+                int centroidFileCount = parentEmb?.FileCount ?? 0;
+                if (liveFileCount < minFolderFiles || centroidFileCount < minFolderFiles)
+                    return new List<FolderSuggestion>();
+            }
 
             var filter = new Dictionary<string, object>
             {
@@ -87,7 +109,8 @@ namespace CloudStoragePlatform.Core.Services.Ai
             List<PineconeMatch> matches;
             try
             {
-                matches = await _pinecone.QueryAsync(vector, topK + 1, filter, includeMetadata: true, includeValues: false, ct: ct);
+                // Fetch extras so we can drop the current parent + home + trashed folders and still fill topK.
+                matches = await _pinecone.QueryAsync(vector, topK + 4, filter, includeMetadata: true, includeValues: false, ct: ct);
             }
             catch (Exception ex)
             {
@@ -107,25 +130,26 @@ namespace CloudStoragePlatform.Core.Services.Ai
                 }
             }
 
-            var qualified = matches
-                .Where(m => m.Score >= minScore)
-                .Where(m => TryGetFolderId(m, out var fid) && fid != currentParentFolderId)
-                .Take(topK)
-                .ToList();
+            var results = new List<FolderSuggestion>();
+            foreach (var m in matches)
+            {
+                if (m.Score < minScore) continue;
+                if (!TryGetFolderId(m, out var folderId)) continue;
+                if (folderId == currentParentFolderId) continue;            // never suggest the folder it's already in
+                var folder = await _foldersRepo.GetFolderByFolderId(folderId);
+                if (folder == null || folder.IsTrash) continue;
+                if (string.Equals(folder.FolderPath, homeFolderPath, StringComparison.OrdinalIgnoreCase)) continue; // never suggest the root home folder
+                results.Add(new FolderSuggestion(folder.FolderId, folder.FolderPath, folder.FolderName, m.Score));
+                if (results.Count >= topK) break;
+            }
 
-            if (qualified.Count == 0) return new List<FolderSuggestion>();
+            if (results.Count == 0) return new List<FolderSuggestion>();
 
-            if (currentParentScore.HasValue && qualified[0].Score < currentParentScore.Value + margin)
+            // The top candidate must beat the current folder's own centroid by a margin (only nudge when there's a clearly better fit).
+            // WAIVED when uploading into the root home folder, since home is the catch-all and has no meaningful "fit".
+            if (!parentIsHome && currentParentScore.HasValue && results[0].Score < currentParentScore.Value + margin)
                 return new List<FolderSuggestion>();
 
-            var results = new List<FolderSuggestion>();
-            foreach (var m in qualified)
-            {
-                if (!TryGetFolderId(m, out var folderId)) continue;
-                var folder = await _foldersRepo.GetFolderByFolderId(folderId);
-                if (folder == null) continue;
-                results.Add(new FolderSuggestion(folderId, folder.FolderPath, folder.FolderName, m.Score));
-            }
             return results;
         }
 

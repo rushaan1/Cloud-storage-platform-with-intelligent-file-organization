@@ -9,7 +9,7 @@ namespace CloudStoragePlatform.Core.ServiceContracts
 {
     public interface IFilesModificationService
     {
-        Task<FileResponse> UploadFile(FileAddRequest fileAddRequest, Stream file);
+        Task<FileResponse> UploadFile(FileAddRequest fileAddRequest, Stream file, bool partOfFolderUpload = false);
         Task<FileResponse> RenameFile(RenameRequest fileRenameRequest);
 
 

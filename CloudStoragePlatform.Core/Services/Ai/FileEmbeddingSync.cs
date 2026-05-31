@@ -31,9 +31,9 @@ namespace CloudStoragePlatform.Core.Services.Ai
             _logger = logger;
         }
 
-        public async ValueTask EnqueueOnCreate(Guid fileId, Guid userId, CancellationToken ct = default)
+        public async ValueTask EnqueueOnCreate(Guid fileId, Guid userId, bool suppressSuggestion = false, CancellationToken ct = default)
         {
-            try { await _orchestrator.EnqueueAsync(new EmbeddingJob(fileId, userId, EmbeddingReason.Created), ct); }
+            try { await _orchestrator.EnqueueAsync(new EmbeddingJob(fileId, userId, EmbeddingReason.Created, suppressSuggestion), ct); }
             catch (Exception ex) { _logger.LogWarning(ex, "EnqueueOnCreate failed for FileId={FileId}", fileId); }
         }
 
@@ -41,6 +41,12 @@ namespace CloudStoragePlatform.Core.Services.Ai
         {
             try { await _orchestrator.EnqueueAsync(new EmbeddingJob(fileId, userId, EmbeddingReason.Renamed), ct); }
             catch (Exception ex) { _logger.LogWarning(ex, "EnqueueOnRename failed for FileId={FileId}", fileId); }
+        }
+
+        public async Task MarkFolderCentroidStale(Guid folderId, CancellationToken ct = default)
+        {
+            try { await _folderEmbRepo.MarkStale(folderId); }
+            catch (Exception ex) { _logger.LogWarning(ex, "MarkFolderCentroidStale failed for FolderId={FolderId}", folderId); }
         }
 
         public async Task UpdateMetadataOnMove(Guid fileId, Guid newFolderId, string newFolderPath, Guid oldFolderId, Guid userId, CancellationToken ct = default)

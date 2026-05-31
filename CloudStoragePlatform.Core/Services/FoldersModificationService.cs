@@ -287,6 +287,13 @@ namespace CloudStoragePlatform.Core.Services
             await Utilities.UpdateChildPaths(_foldersRepository, _filesRepository, folder, oldp, newp);
             await Utilities.UpdateMetadataRename(folder, _foldersRepository);
             Folder? updatedFolder = await _foldersRepository.UpdateFolder(folder, true, false, false, false, false, false);
+
+            // Folder name feeds the centroid's blended name signal; refresh it on rename.
+            if (_ui.User != null)
+            {
+                await _embeddingSync.MarkFolderCentroidStale(folder.FolderId);
+            }
+
             return updatedFolder!.ToFolderResponse();
         }
 

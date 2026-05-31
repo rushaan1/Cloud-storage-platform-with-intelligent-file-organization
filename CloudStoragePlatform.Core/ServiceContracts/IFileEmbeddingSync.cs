@@ -6,8 +6,11 @@ namespace CloudStoragePlatform.Core.ServiceContracts
     /// </summary>
     public interface IFileEmbeddingSync
     {
-        ValueTask EnqueueOnCreate(Guid fileId, Guid userId, CancellationToken ct = default);
+        ValueTask EnqueueOnCreate(Guid fileId, Guid userId, bool suppressSuggestion = false, CancellationToken ct = default);
         ValueTask EnqueueOnRename(Guid fileId, Guid userId, CancellationToken ct = default);
+
+        /// <summary>Marks a folder's centroid stale so it (and its blended folder-name signal) gets recomputed.</summary>
+        Task MarkFolderCentroidStale(Guid folderId, CancellationToken ct = default);
 
         Task UpdateMetadataOnMove(Guid fileId, Guid newFolderId, string newFolderPath, Guid oldFolderId, Guid userId, CancellationToken ct = default);
         Task UpdateMetadataOnTrash(Guid fileId, bool isTrash, Guid parentFolderId, Guid userId, CancellationToken ct = default);
