@@ -1,8 +1,8 @@
 # Evaluation harness
 
 Reproducible scripts that drive the smart-upload (folder suggestion) and
-semantic search features end-to-end against a running AegisCloud backend, then
-compute the metrics + figures used in the academic write-up.
+semantic search features end-to-end against a running Cloud Storage Platform
+backend, then compute the metrics + figures used in the academic write-up.
 
 All scripts are plain Python 3.10+; install dependencies with:
 
@@ -13,12 +13,16 @@ pip install -r eval\requirements.txt
 ## Required environment variables
 
 ```powershell
-$env:AEGIS_BASE_URL  = "https://localhost:7219"   # default
-$env:AEGIS_EMAIL     = "your-account@example.com"
-$env:AEGIS_PASSWORD  = "your-password"
-$env:AEGIS_VERIFY_SSL = "false"                    # default; flip to "true" for prod
-$env:AEGIS_SSE_PATH  = "/api/Modifications/sse"   # default
+$env:CSP_BASE_URL    = "https://localhost:7219"   # default
+$env:CSP_EMAIL       = "your-account@example.com"
+$env:CSP_PASSWORD    = "your-password"
+$env:CSP_VERIFY_SSL  = "false"                     # default; flip to "true" for prod
+$env:CSP_SSE_PATH    = "/api/Modifications/sse"   # default
 ```
+
+The legacy `AEGIS_*` env var names are still honoured for backward
+compatibility — if you already have them exported, the scripts will pick
+them up unchanged.
 
 `upload_bootstrap.py` and the eval scripts re-login automatically every
 45 minutes so long runs survive JWT expiry.

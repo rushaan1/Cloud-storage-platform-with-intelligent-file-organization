@@ -1,14 +1,17 @@
-"""Shared helpers for the AegisCloud evaluation harness.
+"""Shared helpers for the Cloud Storage Platform evaluation harness.
 
 Environment variables
 ---------------------
-AEGIS_BASE_URL    Backend base URL (default: https://localhost:7219)
-AEGIS_EMAIL       Account email to authenticate as.
-AEGIS_PASSWORD    Account password.
-AEGIS_SSE_PATH    SSE endpoint path (default: /api/Modifications/sse).
-AEGIS_VERIFY_SSL  "true" to verify TLS certs (default: false for localhost dev).
+CSP_BASE_URL      Backend base URL (default: https://localhost:7219)
+CSP_EMAIL         Account email to authenticate as.
+CSP_PASSWORD      Account password.
+CSP_SSE_PATH      SSE endpoint path (default: /api/Modifications/sse).
+CSP_VERIFY_SSL    "true" to verify TLS certs (default: false for localhost dev).
 
-`AegisClient` re-uses a single `requests.Session` so the JWT cookie set by
+The legacy ``AEGIS_*`` env var names are still honoured for backward
+compatibility so existing shell sessions don't need re-exporting.
+
+`PlatformClient` re-uses a single `requests.Session` so the JWT cookie set by
 `/api/Account/login` is sent on every subsequent request. Call
 `ensure_authenticated()` between operations and the session is re-logged-in
 once `refresh_after_seconds` has elapsed since the last login.
@@ -29,16 +32,29 @@ from sseclient import SSEClient
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-BASE_URL = os.environ.get("AEGIS_BASE_URL", "https://localhost:7219").rstrip("/")
-EMAIL = os.environ.get("AEGIS_EMAIL", "")
-PASSWORD = os.environ.get("AEGIS_PASSWORD", "")
-VERIFY_SSL = os.environ.get("AEGIS_VERIFY_SSL", "false").lower() == "true"
+def _env(*names: str, default: str = "") -> str:
+    """Read the first non-empty value from a list of env var names.
+
+    Lets the caller use the new ``CSP_*`` names while keeping the legacy
+    ``AEGIS_*`` names working for already-configured shells.
+    """
+    for n in names:
+        v = os.environ.get(n)
+        if v:
+            return v
+    return default
+
+
+BASE_URL = _env("CSP_BASE_URL", "AEGIS_BASE_URL", default="https://localhost:7219").rstrip("/")
+EMAIL = _env("CSP_EMAIL", "AEGIS_EMAIL")
+PASSWORD = _env("CSP_PASSWORD", "AEGIS_PASSWORD")
+VERIFY_SSL = _env("CSP_VERIFY_SSL", "AEGIS_VERIFY_SSL", default="false").lower() == "true"
 
 ACCOUNT_LOGIN_PATH = "/api/Account/login"
 MODIFICATIONS_ADD_PATH = "/api/Modifications/add"
 MODIFICATIONS_UPLOAD_PATH = "/api/Modifications/upload"
 SSE_AUTH_PATH = "/api/Modifications/sseauth"
-SSE_PATH = os.environ.get("AEGIS_SSE_PATH", "/api/Modifications/sse")
+SSE_PATH = _env("CSP_SSE_PATH", "AEGIS_SSE_PATH", default="/api/Modifications/sse")
 RETRIEVALS_SEMANTIC_SEARCH = "/api/Retrievals/semanticSearch"
 RETRIEVALS_SUBSTRING_SEARCH = "/api/Retrievals/getAllFiltered"
 
@@ -59,7 +75,7 @@ class AuthError(RuntimeError):
     """Raised when credentials are missing or login fails."""
 
 
-class AegisClient:
+class PlatformClient:
     """Authenticated HTTP + SSE client for the platform."""
 
     def __init__(
@@ -93,7 +109,7 @@ class AegisClient:
     def login(self) -> Dict[str, Any]:
         if not self.email or not self.password:
             raise AuthError(
-                "Set AEGIS_EMAIL and AEGIS_PASSWORD environment variables before running."
+                "Set CSP_EMAIL and CSP_PASSWORD environment variables before running."
             )
         body = {"Email": self.email, "Password": self.password, "RememberMe": True}
         r = self.session.post(
@@ -266,3 +282,7 @@ def configure_logging(verbose: bool = False) -> None:
         format="%(asctime)s %(levelname)s %(name)s | %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S",
     )
+
+
+# Backward-compat alias — older user scripts may still `from common import AegisClient`.
+AegisClient = PlatformClient

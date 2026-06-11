@@ -36,7 +36,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from common import (  # noqa: E402
-    AegisClient,
+    PlatformClient,
     bulk_response_files,
     configure_logging,
     file_response_id,
@@ -73,7 +73,7 @@ def main() -> int:
     if not queries:
         raise SystemExit(f"query catalog is empty: {args.queries}")
 
-    client = AegisClient()
+    client = PlatformClient()
     client.login()
 
     out_rows = []

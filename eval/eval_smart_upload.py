@@ -35,7 +35,7 @@ from threading import Event, Lock, Thread
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from common import (  # noqa: E402
-    AegisClient,
+    PlatformClient,
     DEFAULT_HOME_PATH,
     configure_logging,
     file_response_id,
@@ -79,7 +79,7 @@ def main() -> int:
             "No rows with intended_use=='smart_upload_test'. Run select_test_set.py first."
         )
 
-    client = AegisClient()
+    client = PlatformClient()
     client.login()
 
     log.info("Starting smart-upload eval over %d test file(s)", len(rows))

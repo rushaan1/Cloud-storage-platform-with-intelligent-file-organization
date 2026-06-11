@@ -21,7 +21,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from common import (  # noqa: E402
-    AegisClient,
+    PlatformClient,
     DEFAULT_HOME_PATH,
     configure_logging,
     file_response_id,
@@ -60,7 +60,7 @@ def main() -> int:
         rows = list(reader)
         fieldnames = reader.fieldnames or []
 
-    client = AegisClient()
+    client = PlatformClient()
     client.login()
 
     # 1) Create one folder per category under \home.

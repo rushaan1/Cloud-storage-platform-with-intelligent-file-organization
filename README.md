@@ -1,8 +1,8 @@
-# AegisCloud AI
+# Cloud Storage Platform
 
 <div align="center">
 
-![AegisCloud AI](https://img.shields.io/badge/Platform-Cloud%20Storage-blue)
+![Cloud Storage Platform](https://img.shields.io/badge/Platform-Cloud%20Storage-blue)
 ![.NET](https://img.shields.io/badge/.NET-6.0-purple)
 ![Angular](https://img.shields.io/badge/Angular-18-red)
 ![License](https://img.shields.io/badge/License-MIT-green)
@@ -32,7 +32,7 @@
 
 ## 🎯 Overview
 
-AegisCloud AI is a comprehensive, enterprise-grade cloud storage solution built with modern web technologies. It provides secure file storage, advanced file management capabilities, real-time synchronization, and AI-powered features to enhance user productivity.
+Cloud Storage Platform is a comprehensive, enterprise-grade cloud storage solution built with modern web technologies. It provides secure file storage, advanced file management capabilities, real-time synchronization, and AI-powered features to enhance user productivity.
 
 ### Key Highlights
 
@@ -160,7 +160,7 @@ AegisCloud AI is a comprehensive, enterprise-grade cloud storage solution built 
 ### Project Structure
 
 ```
-AegisCloud-AI/
+Cloud-Storage-Platform/
 ├── Cloud Storage Platform/          # Web API Project
 │   ├── Controllers/                # API Controllers
 │   ├── Filters/                    # Custom filters and middleware
@@ -218,8 +218,8 @@ AegisCloud-AI/
 #### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/rushaan1/aegiscloud-ai.git
-cd aegiscloud-ai
+git clone https://github.com/rushaan1/cloud-storage-platform.git
+cd cloud-storage-platform
 ```
 
 #### 2. Database Setup
@@ -315,8 +315,8 @@ The frontend will be available at `https://localhost:4200`
 Build and run using Docker:
 
 ```bash
-docker build -t aegiscloud-ai .
-docker run -p 8080:80 aegiscloud-ai
+docker build -t cloud-storage-platform .
+docker run -p 8080:80 cloud-storage-platform
 ```
 
 ---
@@ -445,14 +445,14 @@ Visit `/swagger` when running the application for interactive API documentation 
 
 ```bash
 # Build image
-docker build -t aegiscloud-ai:latest .
+docker build -t cloud-storage-platform:latest .
 
 # Run container
 docker run -d \
   -p 8080:80 \
   -e ConnectionStrings__Default="your-connection-string" \
   -e InitialPathForStorage="/app/storage" \
-  aegiscloud-ai:latest
+  cloud-storage-platform:latest
 ```
 
 ### Environment Variables
@@ -563,8 +563,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 For questions, issues, or contributions:
 
-- **Issues**: [GitHub Issues](https://github.com/yourusername/aegiscloud-ai/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/yourusername/aegiscloud-ai/discussions)
+- **Issues**: [GitHub Issues](https://github.com/yourusername/cloud-storage-platform/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/yourusername/cloud-storage-platform/discussions)
 
 ---
 
