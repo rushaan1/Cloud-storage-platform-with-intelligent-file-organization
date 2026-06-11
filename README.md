@@ -38,7 +38,7 @@ AegisCloud AI is a comprehensive, enterprise-grade cloud storage solution built 
 
 - **Secure & Scalable**: Built with security-first principles, featuring JWT authentication, encrypted storage, and role-based access control
 - **Real-Time Updates**: Server-Sent Events (SSE) for instant file synchronization across devices
-- **AI Integration**: Google Cloud AI Platform integration for image upscaling and enhancement
+- **AI-Augmented Organization**: Semantic search over file contents, real-time smart-upload folder suggestions, bulk AI organise, and automatic Gemini-generated tags — all powered by Vertex AI embeddings and a Pinecone vector index
 - **Modern UI**: Responsive Angular frontend with intuitive user experience
 - **RESTful API**: Well-structured REST API with comprehensive Swagger documentation
 
@@ -55,7 +55,9 @@ AegisCloud AI is a comprehensive, enterprise-grade cloud storage solution built 
   - Drag-and-drop file organization
 
 - **🔍 Search & Organization**
-  - Full-text search across files and folders
+  - **Semantic search** — natural-language queries that look at file *contents*, not just filenames (a search for `"income tax records"` finds a PDF called `notes.pdf` that contains form-1040 references)
+  - Filename substring search is unioned with the semantic results so the old keyword UX is preserved
+  - **Tag filter overlay** — a floating button at the bottom-right opens a multi-select OR filter over Gemini-generated file tags
   - Advanced filtering by file type, date, size
   - Favorites system for quick access
   - Trash/Recycle bin with restore functionality
@@ -83,11 +85,14 @@ AegisCloud AI is a comprehensive, enterprise-grade cloud storage solution built 
   - Video thumbnail extraction with FFmpeg
 
 - **🤖 AI-Powered Features**
-  - Image upscaling using Google Cloud AI Platform (Imagen 4.0)
-  - Background processing with RAM optimization
-  - Automatic quality enhancement
-  - File-based prompting (in progress — API/UX may change)
-  - AI-based search (in development)
+  - **Semantic search** — every uploaded file is embedded into a 768-dim vector with Vertex AI `text-embedding-005` and stored in Pinecone with a per-user metadata filter. Queries are embedded at request time and matched by cosine similarity, so users can find a file by what it *says* rather than what it's *called*. For images and GIFs, a Gemini 2.5 Flash caption is embedded in place of OCR.
+  - **Smart upload suggestions** — after a file lands in the catch-all root folder, the orchestrator compares its vector to every folder centroid for that user and emits a real-time `folder_suggestion` SSE event with the top 3 ranked folders. A dismissible overlay in the UI lets the user accept a single suggestion with one click. Suppressed cleanly when the user is uploading an entire folder (the destination is unambiguous).
+  - **AI Organise (bulk)** — a button on the panel toolbar scans every file in the currently-open folder and surfaces those whose current parent has drifted from their semantic neighbourhood. Same overlay; accepting moves files in bulk.
+  - **Folder centroids** — each folder maintains an aggregated vector (L2-normalized convex blend of the mean of its file vectors and the folder-name embedding, default 70/30) so suggestions stay meaningful even for nearly-empty folders. A `FolderCentroidRecomputer` background service recomputes stale centroids periodically.
+  - **Automatic tagging** — after embedding, Gemini 2.5 Flash is prompted to produce 2–5 short tags (max 4 words each) capturing the file's content and intent. Tags are persisted on the `File` row, displayed as rounded chips in the file's info panel and preview page, and feed the tag-filter overlay above. A `tagged` SSE event lets the UI patch the file in place without a refetch.
+  - **Embedding orchestrator** — single `BackgroundService` consuming a bounded `Channel<EmbeddingJob>`, runs at most N jobs in parallel, waits on a minimum-RAM threshold before starting work, retries with exponential backoff, and uses SHA-256 content hashing for idempotent re-runs. Per-file status (`Pending` / `Processing` / `Completed` / `Failed`) is tracked in SQL; the vectors themselves live in Pinecone (Pinecone is source of truth for vectors).
+  - **Image upscaling** — Google Cloud AI Platform (Imagen 4.0) on-demand for any image file
+  - **File-based prompting** (in progress — API/UX may change)
 
 - **📈 Analytics & Insights**
   - Storage usage tracking and visualization
@@ -117,13 +122,19 @@ AegisCloud AI is a comprehensive, enterprise-grade cloud storage solution built 
 
 - **Framework**: ASP.NET Core 6.0
 - **Database**: SQL Server with Entity Framework Core
+- **Vector DB**: Pinecone (768d, cosine, per-user metadata filter; file and folder-centroid vectors share a single index)
 - **Authentication**: ASP.NET Core Identity with JWT Bearer tokens
 - **File Processing**: 
   - FFmpeg for video processing
   - ImageSharp for image manipulation
   - PdfiumViewer for PDF handling
-- **AI Services**: Google Cloud AI Platform (Imagen 4.0)
-- **Architecture**: Clean Architecture with Repository Pattern
+  - UglyToad.PdfPig for PDF text extraction (embedding pipeline)
+  - DocumentFormat.OpenXml for `.docx` text extraction
+- **AI Services**:
+  - Vertex AI `text-embedding-005` — file & query embeddings
+  - Gemini 2.5 Flash — image captions for visual files + automatic tag generation
+  - Google Cloud AI Platform (Imagen 4.0) — image upscaling
+- **Architecture**: Clean Architecture with Repository Pattern; AI pipeline driven by a single `BackgroundService` + `Channel<EmbeddingJob>`
 - **API Documentation**: Swagger/OpenAPI
 
 ### Frontend
@@ -199,6 +210,8 @@ AegisCloud-AI/
 - **SQL Server** (LocalDB or full instance)
 - **Visual Studio 2022** or **VS Code** (recommended)
 - **FFmpeg** (included in project for video processing)
+- **Pinecone account** (free starter plan suffices) — create one index named `cloud-storage-semantic`, 768d, cosine metric, serverless `aws / us-east-1`, then copy the **index host** and an API key
+- **Google Cloud project** with **Vertex AI API** enabled, a service account with `Vertex AI User` permissions, and a service-account JSON key (the same project is used for both `text-embedding-005` embeddings and `gemini-2.5-flash` captioning/tagging)
 
 ### Installation
 
@@ -247,9 +260,34 @@ Update `appsettings.json` with your configuration:
   "SMTPEmail": "your-email@gmail.com",
   "pwdsmtp": "your-smtp-password",
   "Google_Auth_Client_ID": "your-google-client-id",
-  "GoogleServiceAccountJsonKey": "base64-encoded-service-account-key"
+  "GoogleServiceAccountJsonKey": "base64-encoded-service-account-key",
+  "Ai": {
+    "Vertex": {
+      "ProjectId": "your-gcp-project-id",
+      "Region": "us-central1",
+      "EmbeddingModel": "text-embedding-005",
+      "CaptionModel": "gemini-2.5-flash"
+    },
+    "Pinecone": {
+      "IndexHost": "your-index-host.svc.aped-4627-b74a.pinecone.io",
+      "IndexName": "cloud-storage-semantic",
+      "Dimension": 768,
+      "Metric": "cosine"
+    },
+    "Embedding": {
+      "MaxParallel": 2,
+      "MaxRetries": 3,
+      "QueueCapacity": 1024,
+      "MaxCharsForEmbedding": 6000
+    },
+    "Search":     { "MinScore": 0.55, "MaxTopK": 50, "DefaultTopK": 20 },
+    "Suggestion": { "MinScore": 0.50, "Margin": 0.10, "TopK": 3, "MinFolderFiles": 5 },
+    "FolderCentroid": { "RecomputeIntervalSeconds": 30, "NameWeight": 0.3 }
+  }
 }
 ```
+
+Sensitive values (`Pinecone:ApiKey`, etc.) belong in `dotnet user-secrets` for development and a secret store (e.g. Azure Key Vault) in production.
 
 #### 4. Run the Backend
 
@@ -315,7 +353,15 @@ docker run -p 8080:80 aegiscloud-ai
 | POST | `/api/Modifications/add` | Create folder |
 | GET | `/api/Retrievals/getAllInHome` | Get home folder contents |
 | GET | `/api/Retrievals/getAllChildrenById` | Get folder children |
-| GET | `/api/Retrievals/getAllFiltered` | Search files/folders |
+| GET | `/api/Retrievals/getAllFiltered` | Filename substring search across files/folders |
+
+### AI Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/Retrievals/semanticSearch?q=<>&topK=20&hybrid=true` | Semantic search over file contents (vectors); when `hybrid=true` (default) the filename substring matches are unioned in after the semantic hits |
+| GET | `/api/Retrievals/suggestFolders?fileId=<>&topK=3` | Top-3 folder suggestions for a single file (used by the smart-upload overlay) |
+| POST | `/api/Retrievals/organiseFolder` | Bulk: for every file in a folder, suggest a better-fitting target if one exists (drives the **AI Organise** button) |
 
 ### Sharing Endpoints
 
@@ -340,6 +386,9 @@ docker run -p 8080:80 aegiscloud-ai
 - `deleted` - File/folder deleted
 - `favorite_updated` - Favorite status changed
 - `trash_updated` - Trash status changed
+- `embedded` - File has been embedded in Pinecone and is now semantically searchable
+- `folder_suggestion` - Smart-upload suggestion ready (`{ fileId, fileName, suggestions: [{ folderId, folderPath, folderName, score }] }`)
+- `tagged` - Gemini-generated tags are available for a file (`{ fileId, tags: string[] }`)
 
 ### Complete API Documentation
 
@@ -499,7 +548,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🙏 Acknowledgments
 
-- **Google Cloud AI Platform** for image upscaling capabilities
+- **Google Cloud Vertex AI** — `text-embedding-005` embeddings + `gemini-2.5-flash` captioning & tagging
+- **Pinecone** — vector store powering semantic search and folder centroids
+- **Google Cloud AI Platform** (Imagen 4.0) for image upscaling
+- **UglyToad.PdfPig** & **DocumentFormat.OpenXml** — text extraction for the embedding pipeline
 - **FFmpeg** for video processing
 - **ImageSharp** for image manipulation
 - **Entity Framework Core** for data access

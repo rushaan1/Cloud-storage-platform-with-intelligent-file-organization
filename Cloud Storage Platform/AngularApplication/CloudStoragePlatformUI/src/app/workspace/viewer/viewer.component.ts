@@ -18,11 +18,12 @@ import {Utils} from "../../Utils";
 import {BreadcrumbsComponent} from "../../items/breadcrumbs/breadcrumbs.component";
 import {LoadingService} from "../../services/StateManagementServices/loading.service";
 import {BreadcrumbService} from "../../services/StateManagementServices/breadcrumb.service";
-import {BehaviorSubject, fromEvent, mapTo, skip, Subscription} from "rxjs";
+import {BehaviorSubject, combineLatest, fromEvent, mapTo, skip, Subscription} from "rxjs";
 import {FileType} from "../../models/FileType";
 import {map} from "rxjs/operators";
 import {NetworkStatusService} from "../../services/network-status-service.service";
 import {SmartSuggestionService} from "../../services/StateManagementServices/smart-suggestion.service";
+import {TagFilterService} from "../../services/StateManagementServices/tag-filter.service";
 
 @Component({
   selector: 'viewer',
@@ -64,7 +65,8 @@ export class ViewerComponent implements OnInit, OnDestroy{
     protected filesState:FilesStateService,
     private ngZone: NgZone,
     private networkStatusService:NetworkStatusService,
-    private smartSuggestions:SmartSuggestionService) {}
+    private smartSuggestions:SmartSuggestionService,
+    private tagFilterService:TagFilterService) {}
 
   ngOnInit(): void {
     this.filesState.setUncreatedFolderExists(false);
@@ -76,14 +78,23 @@ export class ViewerComponent implements OnInit, OnDestroy{
       }
     }));
     ///////////  FILES STATE  ////////////
-    this.subscriptions.push(this.filesState.filesInViewer$.pipe(skip(1)).subscribe(files => {
+    this.subscriptions.push(combineLatest([
+      this.filesState.filesInViewer$.pipe(skip(1)),
+      this.tagFilterService.selectedTags$
+    ]).subscribe(([files, selectedTags]: [File[], Set<string>]) => {
 
+      let filtered: File[];
       if (this.crumbs[0]!="Trash"){
-        this.visibleFiles = files.filter((f)=>{return !f.isTrash});
+        filtered = files.filter((f)=>{return !f.isTrash});
       }
       else{
-        this.visibleFiles = files;
+        filtered = files;
       }
+      // Tag filter (OR semantics): show files that have at least one selected tag.
+      if (selectedTags && selectedTags.size > 0) {
+        filtered = filtered.filter(f => (f.tags || []).some((t: string) => selectedTags.has(t)));
+      }
+      this.visibleFiles = filtered;
       this.filterOutFoldersBeingMoved();
     }));
     ///////////  QUERY PARAMS  ////////////
@@ -343,6 +354,18 @@ export class ViewerComponent implements OnInit, OnDestroy{
               case "embedded":
                 // File is now searchable via semantic search. (No visible UI change in v1 — just a debug log.)
                 console.log("File embedded and searchable: " + data.content.fileId);
+                break;
+              case "tagged":
+                // Patch the file's tags in the current view so the tag-filter overlay sees them
+                // and any open file-item / preview reflects them.
+                if (data.content && data.content.fileId) {
+                  const current = this.filesState.getFilesInViewer();
+                  const idx = current.findIndex(f => f.fileId === data.content.fileId);
+                  if (idx >= 0) {
+                    current[idx].tags = data.content.tags || [];
+                    this.filesState.setFilesInViewer([...current]);
+                  }
+                }
                 break;
               case "folder_suggestion":
                 // Smart upload: backend thinks this file might fit better elsewhere.
@@ -715,7 +738,8 @@ export class ViewerComponent implements OnInit, OnDestroy{
       uncreated: true,
       fileType: FileType.Folder,
       size: 0,
-      thumbnail: null
+      thumbnail: null,
+      tags: []
     };
     this.filesState.setFilesInViewer([...this.filesState.getFilesInViewer(),folder]);
   }

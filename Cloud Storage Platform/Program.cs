@@ -87,6 +87,7 @@ namespace CloudStoragePlatform.Web
             builder.Services.AddSingleton<IVertexAccessTokenProvider, VertexAccessTokenProvider>();
             builder.Services.AddHttpClient<IVertexEmbeddingClient, VertexEmbeddingClient>();
             builder.Services.AddHttpClient<IGeminiCaptioner, GeminiCaptioner>();
+            builder.Services.AddHttpClient<IGeminiTagger, GeminiTagger>();
             builder.Services.AddHttpClient<IPineconeClient, PineconeClient>();
             builder.Services.AddScoped<IFileEmbeddingRepository, FileEmbeddingRepository>();
             builder.Services.AddScoped<IFolderEmbeddingRepository, FolderEmbeddingRepository>();

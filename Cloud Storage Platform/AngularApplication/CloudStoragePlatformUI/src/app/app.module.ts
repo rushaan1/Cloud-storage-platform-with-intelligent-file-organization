@@ -9,6 +9,7 @@ import {AccountModule} from "./account/account.module";
 import {HTTP_INTERCEPTORS} from "@angular/common/http";
 import {RequestInterceptor} from "./services/ApiServices/request-interceptor.service";
 import {FolderSuggestionOverlayComponent} from "./workspace/folder-suggestion-overlay/folder-suggestion-overlay.component";
+import {TagFilterOverlayComponent} from "./workspace/tag-filter-overlay/tag-filter-overlay.component";
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import {FolderSuggestionOverlayComponent} from "./workspace/folder-suggestion-ov
     AppRoutingModule,
     WorkspaceModule,
     AccountModule,
-    FolderSuggestionOverlayComponent
+    FolderSuggestionOverlayComponent,
+    TagFilterOverlayComponent
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: RequestInterceptor, multi: true}

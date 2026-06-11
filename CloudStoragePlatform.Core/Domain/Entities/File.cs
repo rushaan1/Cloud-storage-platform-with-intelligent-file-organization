@@ -14,18 +14,27 @@ namespace CloudStoragePlatform.Core.Domain.Entities
     {
         [Key]
         public Guid FileId { get; set; }
-        
+
         public string FileName { get; set; }
-        
+
         public string FilePath { get; set; }
-                
+
         public FileType FileType { get; set; }
-        
+
         public Guid ParentFolderId { get; set; }
         public virtual Folder ParentFolder { get; set; }
 
+        /// <summary>JSON-encoded array of AI-generated topical tags (e.g. ["spring","flowers"]). Null until first generated.</summary>
+        public string? Tags { get; set; }
+
         public FileResponse ToFileResponse(byte[]? thumbnail = null)
         {
+            List<string>? parsedTags = null;
+            if (!string.IsNullOrWhiteSpace(Tags))
+            {
+                try { parsedTags = System.Text.Json.JsonSerializer.Deserialize<List<string>>(Tags); }
+                catch { parsedTags = null; }
+            }
             return new FileResponse()
             {
                 FileId = FileId,
@@ -35,7 +44,8 @@ namespace CloudStoragePlatform.Core.Domain.Entities
                 IsTrash = IsTrash,
                 FileType = FileType,
                 Thumbnail = thumbnail,
-                Size = Size
+                Size = Size,
+                Tags = parsedTags
             };
         }
     }

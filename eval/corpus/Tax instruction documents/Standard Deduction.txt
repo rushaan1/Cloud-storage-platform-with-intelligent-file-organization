@@ -1,0 +1,170 @@
+Standard Deduction
+
+What's New
+
+Standard deduction increased. The standard deduction for taxpayers who don't itemize their deductions on Schedule A (Form 1040) has increased. The amount of your standard deduction depends on your filing status and other factors. Use the 2025 Standard Deduction Tables near the end of this chapter to figure your standard deduction.
+
+Enhanced deduction for seniors. Beginning in 2025, taxpayers who are age 65 or older may be eligible for the enhanced deduction for seniors. The maximum amount of the deduction is $6,000 per person. See Schedule 1-A (Form 1040) and the Instructions for Form 1040 for more information.
+
+Introduction
+
+This chapter discusses the following topics.
+
+• How to figure the amount of your standard deduction.
+• The standard deduction for dependents.
+• Who should itemize deductions.
+
+Most taxpayers have a choice of either taking a standard deduction or itemizing their deductions. If you have a choice, you can use the method that gives you the lower tax.
+
+The standard deduction is a dollar amount that reduces your taxable income. It is a benefit that eliminates the need for many taxpayers to itemize actual deductions, such as medical expenses, charitable contributions, and taxes, on Schedule A (Form 1040). The standard deduction is higher for taxpayers who:
+
+• Are 65 or older, or
+• Are blind.
+
+You benefit from the standard deduction if your standard deduction is more than the total of your allowable itemized deductions.
+
+Persons not eligible for the standard deduction. Your standard deduction is zero and you should itemize any deductions you have if:
+
+• Your filing status is married filing separately, and your spouse itemizes deductions on their return;
+• You are filing a tax return for a short tax year because of a change in your annual accounting period; or
+• You are a nonresident or dual-status alien during the year. You are considered a dual-status alien if you were both a nonresident and resident alien during the year.
+
+If you are a nonresident alien who is married to a U.S. citizen or resident alien at the end of the year, you can choose to be treated as a U.S. resident. (See Pub. 519.) If you make this choice, you can take the standard deduction.
+
+If you can be claimed as a dependent on another person's return (such as your parents' return), your standard deduction may be limited. See Standard Deduction for Dependents, later.
+
+Useful Items
+
+You may want to see:
+
+Publication
+
+501 Dependents, Standard Deduction, and Filing Information
+
+502 Medical and Dental Expenses
+
+526 Charitable Contributions
+
+530 Tax Information for Homeowners
+
+547 Casualties, Disasters, and Thefts
+
+550 Investment Income and Expenses
+
+936 Home Mortgage Interest Deduction
+
+970 Tax Benefits for Education
+
+Form (and Instructions)
+
+Schedule A (Form 1040) Itemized Deductions
+
+Standard Deduction Amount
+
+The standard deduction amount depends on your filing status, whether you are 65 or older or blind, and whether another taxpayer can claim you as a dependent. Generally, the standard deduction amounts are adjusted each year for inflation. The standard deduction amounts for most people are shown in Table 10-1.
+
+Decedent's final return. The standard deduction for a decedent's final tax return is the same as it would have been had the decedent continued to live. However, if the decedent wasn't 65 or older at the time of death, the higher standard deduction for age can't be claimed.
+
+Higher Standard Deduction for Age (65 or Older)
+
+If you are age 65 or older on the last day of the year and don't itemize deductions, you are entitled to a higher standard deduction. You are considered 65 on the day before your 65th birthday. Therefore, you can take a higher standard deduction for 2025 if you were born before January 2, 1961.
+
+Use Table 10-2 to figure the standard deduction amount.
+
+Death of a taxpayer. If you are preparing a return for someone who died in 2025, read this before using Table 10-2 or Table 10-3. Consider the taxpayer to be 65 or older at the end of 2025 only if they were 65 or older at the time of death. Even if the taxpayer was born before January 2, 1961, they are not considered 65 or older at the end of 2025 unless they were 65 or older at the time of death.
+
+A person is considered to reach age 65 on the day before their 65th birthday.
+
+Higher Standard Deduction for Blindness
+
+If you are blind on the last day of the year and you don't itemize deductions, you are entitled to a higher standard deduction.
+
+Not totally blind. If you aren't totally blind, you must get a certified statement from an eye doctor (ophthalmologist or optometrist) that:
+
+• You can't see better than 20/200 in the better eye with glasses or contact lenses, or
+• Your field of vision is 20 degrees or less.
+
+If your eye condition isn't likely to improve beyond these limits, the statement should include this fact. Keep the statement in your records.
+
+If your vision can be corrected beyond these limits only by contact lenses that you can wear only briefly because of pain, infection, or ulcers, you can take the higher standard deduction for blindness if you otherwise qualify.
+
+Spouse 65 or Older or Blind
+
+You can take the higher standard deduction if your spouse is age 65 or older or blind and:
+
+• You file a joint return, or
+• You file a separate return and your spouse had no gross income and can't be claimed as a dependent by another taxpayer.
+
+Death of a spouse. If your spouse died in 2025 before reaching age 65, you can't take a higher standard deduction because of your spouse. Even if your spouse was born before January 2, 1961, your spouse isn't considered 65 or older at the end of 2025 unless your spouse was 65 or older at the time of death.
+
+A person is considered to reach age 65 on the day before their 65th birthday.
+
+Example. Your spouse was born on February 14, 1960, and died on February 13, 2025. Your spouse is considered age 65 at the time of death. However, if your spouse died on February 12, 2025, your spouse isn't considered age 65 at the time of death and isn't 65 or older at the end of 2025.
+
+You can't claim the higher standard deduction for an individual other than yourself and your spouse.
+
+Higher Standard Deduction for Net Disaster Loss
+
+Your standard deduction may be increased by any net qualified disaster loss.
+
+See the Instructions for Form 1040 and the Instructions for Schedule A (Form 1040) for more information on how to figure your increased standard deduction and how to report it on Form 1040 or 1040-SR.
+
+Examples
+
+The following examples illustrate how to determine your standard deduction using Tables 10-1 and 10-2.
+
+Example 1. A married couple, 46 and 33 years old, are filing a joint return for 2025. Neither is blind, and neither can be claimed as a dependent. They decide not to itemize their deductions. They use Table 10-1. Their standard deduction is $31,500.
+
+Example 2. The facts are the same as in Example 1, except that one of the spouses is blind at the end of 2025. They use Table 10-2. Their standard deduction is $33,100.
+
+Example 3. A married couple is filing a joint return for 2025. Both are over age 65. Neither is blind, and neither can be claimed as a dependent. If they don't itemize deductions, they use Table 10-2. Their standard deduction is $34,700.
+
+Standard Deduction for Dependents
+
+The standard deduction for an individual who can be claimed as a dependent on another person's tax return is generally limited to the greater of:
+
+• $1,350, or
+• The individual's earned income for the year plus $450 (but not more than the regular standard deduction amount, generally $15,750).
+
+However, if the individual is 65 or older or blind, the standard deduction may be higher.
+
+If you (or your spouse, if filing jointly) can be claimed as a dependent on someone else's return, use Table 10-3 to determine your standard deduction.
+
+Earned income defined. Earned income is salaries, wages, tips, professional fees, and other amounts received as pay for work you actually perform.
+
+For purposes of the standard deduction, earned income also includes any part of a taxable scholarship or fellowship grant. See chapter 1 of Pub. 970 for more information on what qualifies as a scholarship or fellowship grant.
+
+Example 1. You are 16 years old and single. Your parents can claim you as a dependent on their 2025 tax return. You have interest income of $780 and wages of $150. You have no itemized deductions and use Table 10-3 to find your standard deduction. You enter $150 (earned income) on line 1, $600 ($150 + $450) on line 3, $1,350 (the larger of $600 and $1,350) on line 5, and $15,750 on line 6. Your standard deduction, on line 7a, is $1,350 (the smaller of $1,350 and $15,750).
+
+Example 2. You are a 22-year-old college student and can be claimed as a dependent on your parents' 2025 tax return. You are married filing a separate return. Your spouse doesn't itemize deductions. You have $1,500 in interest income and wages of $3,800 and no itemized deductions. You find your standard deduction by using Table 10-3. You enter earned income, $3,800, on line 1. You add lines 1 and 2 and enter $4,250 ($3,800 + $450) on line 3. On line 5, you enter $4,250, the larger of lines 3 and 4. Because you are married filing a separate return, you enter $15,750 on line 6. On line 7a, you enter $4,250 as the standard deduction amount because it is smaller than $15,750, the amount on line 6.
+
+Example 3. You are single and can be claimed as a dependent on your parents' 2025 tax return. You are 18 years old and blind and have interest income of $1,300, wages of $2,900, and no itemized deductions. You use Table 10-3 to find the standard deduction amount. You enter wages of $2,900 on line 1, and add lines 1 and 2 and enter $3,350 ($2,900 + $450) on line 3. On line 5, you enter $3,350, the larger of lines 3 and 4. Because you are single, you enter $15,750 on line 6 and $3,350 on line 7a. This is the smaller of the amounts on lines 5 and 6. Because you checked one box in the top part of the worksheet, you enter $2,000 on line 7b, then add the amounts on lines 7a and 7b and enter the standard deduction amount of $5,350 ($3,350 + $2,000) on line 7c.
+
+Example 4. You are 18 years old and single and can be claimed as a dependent on your parents' 2025 tax return. You have wages of $7,000, interest income of $500, a business loss of $3,000, and no itemized deductions. You use Table 10-3 to figure the standard deduction amount. You enter $4,000 ($7,000 − $3,000) on line 1, and add lines 1 and 2 and enter $4,450 ($4,000 + $450) on line 3. On line 5, you enter $4,450, the larger of lines 3 and 4, and, because you are single, $15,750 on line 6. On line 7a, you enter $4,450 as the standard deduction amount because it is smaller than $15,750, the amount on line 6.
+
+Who Should Itemize
+
+You should itemize deductions if your total deductions are more than your standard deduction amount. Also, you should itemize if you don't qualify for the standard deduction, as discussed earlier under Persons not eligible for the standard deduction.
+
+You should first figure your itemized deductions and compare that amount to your standard deduction to make sure you are using the method that gives you the greater benefit.
+
+When to itemize. You may benefit from itemizing your deductions on Schedule A (Form 1040) if you:
+
+• Don't qualify for the standard deduction,
+• Had large uninsured medical and dental expenses during the year,
+• Paid interest and taxes on your home,
+• Had large uninsured casualty or theft losses,
+• Made large contributions to qualified charities, or
+• Have total itemized deductions that are more than the standard deduction to which you are otherwise entitled.
+
+These deductions are explained in chapter 11 and in the publications listed under Useful Items, earlier.
+
+If you decide to itemize your deductions, complete Schedule A (Form 1040) and attach it to your Form 1040 or 1040-SR. Enter the amount from Schedule A (Form 1040), line 17, on Form 1040 or 1040-SR, line 12e.
+
+Electing to itemize for state tax or other purposes. Even if your itemized deductions are less than your standard deduction, you can elect to itemize deductions on your federal return rather than taking the standard deduction. You may want to do this if, for example, the tax benefit of itemizing your deductions on your state tax return is greater than the tax benefit you lose on your federal return by not taking the standard deduction. To make this election, you must check the box on line 18 of Schedule A (Form 1040).
+
+Changing your mind. If you don't itemize your deductions and later find that you should have itemized—or if you itemize your deductions and later find you shouldn't have—you can change your return by filing Form 1040-X, Amended U.S. Individual Income Tax Return. See Amended Returns and Claims for Refund in chapter 1 for more information on amended returns.
+
+Married persons who filed separate returns. You can change methods of taking deductions only if you and your spouse both make the same changes. Both of you must file a consent to assessment for any additional tax either one may owe as a result of the change.
+
+You and your spouse can use the method that gives you the lower total tax, even though one of you may pay more tax than you would have paid by using the other method. You both must use the same method of claiming deductions. If one itemizes deductions, the other should itemize because they won't qualify for the standard deduction. See Persons not eligible for the standard deduction, earlier.

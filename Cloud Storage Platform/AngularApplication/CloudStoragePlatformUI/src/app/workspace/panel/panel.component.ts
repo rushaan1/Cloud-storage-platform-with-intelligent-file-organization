@@ -10,6 +10,7 @@ import {HttpEvent, HttpEventType} from "@angular/common/http";
 import {NetworkStatusService} from "../../services/network-status-service.service";
 import {finalize} from "rxjs";
 import {FilesStateService} from "../../services/StateManagementServices/files-state.service";
+import {SmartSuggestionService} from "../../services/StateManagementServices/smart-suggestion.service";
 
 @Component({
   selector: 'panel',
@@ -42,12 +43,13 @@ export class PanelComponent implements OnInit, AfterViewChecked {
   windowWidth: number = window.innerWidth;
   mobileSearchActive: boolean = false;
   userName: string = '';
+  aiOrganiseLoading = false;
 
   // For blocked cursor/hover state on disabled controls
   sortBlockedHover = false;
   styleBlockedHover = false;
 
-  constructor(protected eventService:EventService, protected router: Router, private breadCrumbService:BreadcrumbService, protected route:ActivatedRoute, protected filesService:FilesAndFoldersService, private networkStatus:NetworkStatusService, protected filesState:FilesStateService, protected cd:ChangeDetectorRef){}
+  constructor(protected eventService:EventService, protected router: Router, private breadCrumbService:BreadcrumbService, protected route:ActivatedRoute, protected filesService:FilesAndFoldersService, private networkStatus:NetworkStatusService, protected filesState:FilesStateService, protected cd:ChangeDetectorRef, protected smartSuggestions:SmartSuggestionService){}
 
   ngOnInit(){
     this.showStartupWelcomeMsgWithPfpDropDown();
@@ -108,6 +110,35 @@ export class PanelComponent implements OnInit, AfterViewChecked {
     }
     this.cd.detectChanges();
     this.eventService.emit("list-style-changed", localStorage.getItem('list'));
+  }
+
+  aiOrganiseClick(){
+    if (this.aiOrganiseLoading || this.filesState.outsideFilesAndFoldersMode) return;
+    if (!this.crumbs || this.crumbs.length === 0 || this.crumbs.indexOf("home") < 0) {
+      this.eventService.emit("addNotif", ["Open a folder first to use AI organise.", 5000]);
+      return;
+    }
+    const path = Utils.constructFilePathForApi(this.crumbs);
+    this.aiOrganiseLoading = true;
+    this.filesService.organiseFolder(path).pipe(finalize(() => this.aiOrganiseLoading = false)).subscribe({
+      next: (entries:any[]) => {
+        if (!entries || entries.length === 0) {
+          this.eventService.emit("addNotif", ["No reorganization suggestions for this folder.", 6000]);
+          return;
+        }
+        entries.forEach(e => {
+          this.smartSuggestions.addSuggestion(
+            e.fileId,
+            e.fileName,
+            (e.suggestions || []).map((s:any) => ({ folderId: s.folderId, folderPath: s.folderPath, folderName: s.folderName, score: s.score }))
+          );
+        });
+        this.eventService.emit("addNotif", ["Added " + entries.length + " AI suggestion(s).", 5000]);
+      },
+      error: () => {
+        this.eventService.emit("addNotif", ["AI organise failed.", 5000]);
+      }
+    });
   }
 
   searchClick(){

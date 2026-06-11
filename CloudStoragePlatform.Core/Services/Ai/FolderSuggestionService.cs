@@ -153,6 +153,44 @@ namespace CloudStoragePlatform.Core.Services.Ai
             return results;
         }
 
+        public async Task<List<FileSuggestionEntry>> SuggestForFolderContentsAsync(Guid folderId, int topK = 3, CancellationToken ct = default)
+        {
+            if (_ui.User == null) throw new InvalidOperationException("User context not set");
+
+            var folder = await _foldersRepo.GetFolderByFolderId(folderId);
+            if (folder == null) return new List<FileSuggestionEntry>();
+
+            var files = folder.Files.Where(f => !f.IsTrash).ToList();
+            if (files.Count == 0) return new List<FileSuggestionEntry>();
+
+            // Batch-fetch all file vectors from Pinecone in one round-trip.
+            var fileIdStrings = files.Select(f => f.FileId.ToString()).ToList();
+            List<PineconeVector> fetched;
+            try
+            {
+                fetched = await _pinecone.FetchAsync(fileIdStrings, ct);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "Pinecone batch fetch failed for AI organise FolderId={FolderId}", folderId);
+                return new List<FileSuggestionEntry>();
+            }
+
+            var vecByFileId = fetched
+                .Where(v => v.Values != null && v.Values.Length > 0)
+                .ToDictionary(v => v.Id, v => v.Values);
+
+            var results = new List<FileSuggestionEntry>();
+            foreach (var f in files)
+            {
+                if (!vecByFileId.TryGetValue(f.FileId.ToString(), out var vec)) continue; // not yet embedded
+                var suggestions = await SuggestFoldersForVectorAsync(vec, folderId, _ui.User.Id, topK, ct);
+                if (suggestions.Count > 0)
+                    results.Add(new FileSuggestionEntry(f.FileId, f.FileName, suggestions));
+            }
+            return results;
+        }
+
         private static bool TryGetFolderId(PineconeMatch m, out Guid id)
         {
             id = Guid.Empty;

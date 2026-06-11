@@ -10,10 +10,11 @@ export class File {
   fileType:FileType;
   thumbnail:string | null = null;
   size:number | null = null;
+  tags: string[] = [];
 
   // TODO ADD ADDITIONAL PROPERTIES HERE FOR FILE MODEL BUT AS NULLABLE PROPERTIES
   // TODO Optionally rename fileId to id, fileName to name etc
-  constructor(fileId: string, fileName: string, filePath: string, isFavorite: boolean = false, isTrash: boolean = false, fileType:FileType, uncreated:boolean=false, size:number, thumbnail:string | null = null) {
+  constructor(fileId: string, fileName: string, filePath: string, isFavorite: boolean = false, isTrash: boolean = false, fileType:FileType, uncreated:boolean=false, size:number, thumbnail:string | null = null, tags: string[] = []) {
     this.isFavorite = isFavorite;
     this.isTrash = isTrash;
     this.filePath = filePath;
@@ -23,5 +24,6 @@ export class File {
     this.uncreated = uncreated;
     this.thumbnail = thumbnail;
     this.size = size;
+    this.tags = tags || [];
   }
 }

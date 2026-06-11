@@ -293,6 +293,9 @@ namespace Cloud_Storage_Platform.Controllers
             Response.Headers.Add("Content-Type", "text/event-stream");
             Response.Headers.Add("Cache-Control", "no-cache");
 
+            await Response.WriteAsync(": connected\n\n");   // SSE comment line, ignored by clients
+            await Response.Body.FlushAsync();
+
             _sse.AddClient(Response, new Guid(userIdStr));
 
             try

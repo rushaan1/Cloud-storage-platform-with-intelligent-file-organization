@@ -1,0 +1,73 @@
+Introduction
+
+This chapter discusses the following topics.
+
+• Whether you have to file a return.
+• How to file electronically.
+• How to file for free.
+• When, how, and where to file your return.
+• What happens if you pay too little or too much tax.
+• What records you should keep and how long you should keep them.
+• How you can change a return you have already filed.
+
+Do I Have To File a Return?
+
+You must file a federal income tax return if you are a citizen or resident of the United States or a resident of Puerto Rico and you meet the filing requirements for any of the following categories that apply to you.
+
+Individuals in general. (There are special rules for individuals whose spouse has died, executors, administrators, legal representatives, U.S. citizens and residents living outside the United States, residents of Puerto Rico, and individuals with income from U.S. territories.)
+Dependents.
+Certain children under age 19 or full-time students.
+Self-employed persons.
+Aliens.
+
+The filing requirements for each category are explained in this chapter.
+
+The filing requirements apply even if you don’t owe tax.
+
+Even if you don’t have to file a return, it may be to your advantage to do so. See Who Should File, later.
+
+File only one federal income tax return for the year regardless of how many jobs you had, how many Forms W-2 you received, or how many states you lived in during the year. Don’t file more than one original return for the same year, even if you haven’t received your refund or haven’t heard from the IRS since you filed.
+
+Individuals—In General
+
+If you are a U.S. citizen or resident, whether you must file a return depends on three factors.
+
+Your gross income.
+Your filing status.
+Your age.
+
+To find out whether you must file, see Table 1-1, Table 1-2, and Table 1-3. Even if no table shows that you must file, you may need to file to get money back. See Who Should File, later.
+
+Gross income. This includes all income you receive in the form of money, goods, property, and services that isn’t exempt from tax. It also includes income from sources outside the United States or from the sale of your main home (even if you can exclude all or part of it). Include part of your social security benefits if:
+
+You were married, filing a separate return, and you lived with your spouse at any time during 2025; or
+Half of your social security benefits plus your other gross income and any tax-exempt interest is more than $25,000 ($32,000 if married filing jointly).
+
+If either (1) or (2) applies, see the Instructions for Form 1040 or Pub. 915 to figure the social security benefits you must include in gross income.
+
+Common types of income are discussed in Part Two of this publication.
+
+Community property states. Community property states include Arizona, California, Idaho, Louisiana, Nevada, New Mexico, Texas, Washington, and Wisconsin. If you and your spouse lived in a community property state, you must usually follow state law to determine what is community property and what is separate income. For details, see Form 8958 and Pub. 555.
+
+Nevada, Washington, and California domestic partners. A registered domestic partner in Nevada, Washington, or California must generally report half the combined community income of the individual and their domestic partner. See Pub. 555.
+
+Self-employed individuals. If you are self-employed, your gross income includes the amount on line 7 of Schedule C (Form 1040), Profit or Loss From Business; and line 9 of Schedule F (Form 1040), Profit or Loss From Farming. See Self-Employed Persons, later, for more information about your filing requirements.
+
+If you don’t report all of your self-employment income, your social security benefits may be lower when you retire.
+
+Filing status. Your filing status depends on whether you are single or married and on your family situation. Your filing status is determined on the last day of your tax year, which is December 31 for most taxpayers. See chapter 2 for an explanation of each filing status.
+
+Age. If you are 65 or older at the end of the year, you can generally have a higher amount of gross income than other taxpayers before you must file. See Table 1-1. You are considered 65 on the day before your 65th birthday. For example, if your 65th birthday is on January 1, 2026, you are considered 65 for 2025.
+
+Surviving Spouses, Executors, Administrators, and Legal Representatives
+
+You must file a final return for a decedent (a person who died) if both of the following are true.
+
+• Your spouse died in 2025 or you are the executor, administrator, or legal representative.
+• The decedent met the filing requirements at the date of death.
+
+For more information on rules for filing a decedent’s final return, see Pub. 559.
+
+U.S. Citizens and Resident Aliens Living Abroad
+
+To determine whether you must file a return, include in your gross income any income you received abroad, including any income you can exclude under the foreign earned income exclusion.

@@ -26,6 +26,10 @@
       <div *ngIf="isFolder" class="metadata-div">Subfolders count: {{metadata.subFoldersCount}}</div>
       <div *ngIf="isFolder" class="metadata-div">Subfiles count: {{metadata.subFilesCount}}</div>
       <div class="metadata-div">Size: {{metadata.size}}</div>
+      <div class="metadata-div tags-row" *ngIf="!isFolder && f.tags && f.tags.length > 0">
+        <span class="tags-label">Tags:</span>
+        <span class="tag-chip" *ngFor="let tag of f.tags">{{ tag }}</span>
+      </div>
       <div class="metadata-div options-txt">Options:</div>
       <div class="btn-options" *ngIf="!isDeleting">
         <button (click)="renameRedirect()" class="btn">Rename</button>

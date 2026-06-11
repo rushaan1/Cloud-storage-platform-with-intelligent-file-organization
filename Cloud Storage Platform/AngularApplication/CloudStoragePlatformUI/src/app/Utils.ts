@@ -74,7 +74,8 @@ export class Utils {
         data.fileType as FileType,
         false,
         data.size,
-        data.thumbnail
+        data.thumbnail,
+        data.tags || []
       );
     } else {
       return new File(
@@ -85,7 +86,9 @@ export class Utils {
         data.isTrash,
         FileType.Folder,
         false,
-        data.size
+        data.size,
+        null,
+        []
       );
     }
   }

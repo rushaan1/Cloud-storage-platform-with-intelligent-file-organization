@@ -2,6 +2,8 @@ namespace CloudStoragePlatform.Core.ServiceContracts
 {
     public record FolderSuggestion(Guid FolderId, string FolderPath, string FolderName, float Score);
 
+    public record FileSuggestionEntry(Guid FileId, string FileName, List<FolderSuggestion> Suggestions);
+
     public interface IFolderSuggestionService
     {
         /// <summary>
@@ -16,5 +18,11 @@ namespace CloudStoragePlatform.Core.ServiceContracts
         /// Used by the orchestrator immediately after embedding a freshly-uploaded file.
         /// </summary>
         Task<List<FolderSuggestion>> SuggestFoldersForVectorAsync(float[] vector, Guid currentParentFolderId, Guid userId, int topK = 3, CancellationToken ct = default);
+
+        /// <summary>
+        /// Iterates every (non-trashed) file inside <paramref name="folderId"/> and returns those for which
+        /// a clearly-better folder exists. Used by the panel's "AI organise" button to bulk-suggest moves.
+        /// </summary>
+        Task<List<FileSuggestionEntry>> SuggestForFolderContentsAsync(Guid folderId, int topK = 3, CancellationToken ct = default);
     }
 }

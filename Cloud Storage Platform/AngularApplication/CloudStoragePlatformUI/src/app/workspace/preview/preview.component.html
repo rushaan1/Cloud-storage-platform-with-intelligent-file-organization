@@ -1,4 +1,7 @@
 <p class="full-name">{{file.fileName}}</p>
+<div class="tags-row" *ngIf="file.tags && file.tags.length > 0">
+  <span class="tag-chip" *ngFor="let tag of file.tags">{{ tag }}</span>
+</div>
 <div class="options">
   <button (click)="download()" title="Download file" class="btn">
     <i class="fa-solid fa-download"></i>

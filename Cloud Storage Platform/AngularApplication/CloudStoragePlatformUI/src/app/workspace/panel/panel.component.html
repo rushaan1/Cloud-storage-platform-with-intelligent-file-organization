@@ -71,9 +71,11 @@
           </div>
         </div>
 
-        <div class="dark-mode">
-          <i class="fa-solid fa-moon"></i>
-          <span class="dark-mode-text-div">Dark Mode</span>
+        <div class="ai-organise" (click)="aiOrganiseClick()"
+             [class.disabled]="aiOrganiseLoading || filesState.outsideFilesAndFoldersMode"
+             [title]="filesState.outsideFilesAndFoldersMode ? 'Cannot be used here' : 'Find files in this folder that might fit better elsewhere'">
+          <i class="fa-solid" [ngClass]="aiOrganiseLoading ? 'fa-spinner fa-spin' : 'fa-wand-magic-sparkles'"></i>
+          <span class="ai-organise-text-div">{{ aiOrganiseLoading ? 'Analyzing…' : 'AI Organise' }}</span>
         </div>
 
         <div class="user-info">

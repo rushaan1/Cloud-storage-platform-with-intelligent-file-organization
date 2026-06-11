@@ -65,3 +65,21 @@ pre{
   align-items: center;
   flex-direction: row;
 }
+
+.tags-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+.tag-chip {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 16px;
+  background: #ede9ff;
+  color: #5847e0;
+  font-size: 12px;
+  font-weight: 500;
+  border: 1px solid #d6cdff;
+}

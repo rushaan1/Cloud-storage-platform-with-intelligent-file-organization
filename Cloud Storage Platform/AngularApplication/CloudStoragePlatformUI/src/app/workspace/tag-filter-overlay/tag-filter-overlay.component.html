@@ -1,0 +1,30 @@
+<button class="tag-fab"
+        *ngIf="hasTags() && !visible"
+        (click)="toggleVisible()"
+        [title]="'Filter files by tag'">
+  <i class="fa-solid fa-tag"></i>
+  <span class="fab-badge" *ngIf="selected.size > 0">{{ selected.size }}</span>
+</button>
+
+<div class="tag-overlay" *ngIf="visible && hasTags()">
+  <div class="tag-header">
+    <span class="title">
+      <i class="fa-solid fa-tag"></i>
+      Tags ({{ tagsWithCounts.length }})
+    </span>
+    <span class="header-actions">
+      <button class="btn-link" *ngIf="selected.size > 0" (click)="clearAll()" title="Clear all selected tags">Clear ({{ selected.size }})</button>
+      <i class="fa-solid fa-xmark" (click)="close()" title="Close"></i>
+    </span>
+  </div>
+
+  <div class="tag-body">
+    <div *ngFor="let item of tagsWithCounts"
+         class="tag-row"
+         [class.selected]="isSelected(item.tag)"
+         (click)="onTagClick(item.tag)">
+      <span class="tag-name">{{ item.tag }}</span>
+      <span class="tag-count">{{ item.count }}</span>
+    </div>
+  </div>
+</div>

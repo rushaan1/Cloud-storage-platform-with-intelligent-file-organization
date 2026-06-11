@@ -79,6 +79,12 @@ public suggestFolders(fileId: string, topK: number = 3): Observable<any[]> {
   return this.httpClient.get<any[]>(`${RETRIEVAL_BASE_URL}/suggestFolders`, { params });
 }
 
+public organiseFolder(folderPath: string, topK: number = 3): Observable<any[]> {
+  Utils.handleStringInvalidError(folderPath);
+  let params = new HttpParams().set("path", folderPath).set("topK", topK);
+  return this.httpClient.get<any[]>(`${RETRIEVAL_BASE_URL}/organiseFolder`, { params });
+}
+
 public getAllFavoriteFolders(): Observable<File[]> {
   let params = new HttpParams();
   const sortVal = localStorage.getItem("sort")?.toString();

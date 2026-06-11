@@ -1,0 +1,79 @@
+Tax Withholding and Estimated Tax
+
+What's New for 2026
+
+Tax law changes for 2026. When you figure how much income tax you want withheld from your pay and when you figure your estimated tax, consider tax law changes effective in 2026. For more information, see Pub. 505, Tax Withholding and Estimated Tax.
+
+Reminders
+
+Estimated tax safe harbor for higher income taxpayers. If your 2025 adjusted gross income was more than $150,000 ($75,000 if you are married filing a separate return), you must pay the smaller of 90% of your expected tax for 2026 or 110% of the tax shown on your 2025 return to avoid an estimated tax penalty.
+
+Introduction
+
+This chapter discusses how to pay your tax as you earn or receive income during the year. In general, the federal income tax is a pay-as-you-go tax. There are two ways to pay as you go.
+
+• Withholding. If you are an employee, your employer probably withholds income tax from your pay. Tax may also be withheld from certain other income, such as pensions, bonuses, commissions, and gambling winnings. The amount withheld is paid to the IRS in your name.
+
+• Estimated tax. If you don’t pay your tax through withholding, or don’t pay enough tax that way, you may have to pay estimated tax. People who are in business for themselves will generally have to pay their tax this way. Also, you may have to pay estimated tax if you receive income such as dividends, interest, capital gains, rent, and royalties. Estimated tax is used to pay not only income tax, but self-employment tax and alternative minimum tax as well.
+
+This chapter explains these methods. In addition, it also explains the following.
+
+• Credit for withholding and estimated tax. When you file your 2025 income tax return, take credit for all the income tax withheld from your salary, wages, pensions, etc., and for the estimated tax you paid for 2025. Also take credit for any excess social security or railroad retirement tax withheld. See Pub. 505.
+
+• Underpayment penalty. If you didn’t pay enough tax during the year, either through withholding or by making estimated tax payments, you may have to pay a penalty. In most cases, the IRS can figure this penalty for you. See Underpayment Penalty for 2025 at the end of this chapter.
+
+Useful Items
+
+You may want to see:
+
+Publication
+
+505 Tax Withholding and Estimated Tax
+
+Form (and Instructions)
+
+W-4 Employee’s Withholding Certificate
+W-4P Withholding Certificate for Periodic Pension or Annuity Payments
+W-4S Request for Federal Income Tax Withholding From Sick Pay
+W-4V Voluntary Withholding Request
+1040-ES Estimated Tax for Individuals
+2210 Underpayment of Estimated Tax by Individuals, Estates, and Trusts
+2210-F Underpayment of Estimated Tax by Farmers and Fishers
+
+Tax Withholding for 2026
+
+This section discusses income tax withholding on:
+
+• Salaries and wages,
+• Tips,
+• Taxable fringe benefits,
+• Sick pay,
+• Pensions and annuities,
+• Gambling winnings,
+• Unemployment compensation, and
+• Certain federal payments.
+
+This section explains the rules for withholding tax from each of these types of income.
+
+This section also covers backup withholding on interest, dividends, and other payments.
+
+Salaries and Wages
+
+Income tax is withheld from the pay of most employees. Your pay includes your regular pay, bonuses, commissions, and vacation allowances. It also includes reimbursements and other expense allowances paid under a nonaccountable plan. See Supplemental Wages, later, for more information about reimbursements and allowances paid under a nonaccountable plan.
+
+If your income is low enough that you won’t have to pay income tax for the year, you may be exempt from withholding. This is explained under Exemption From Withholding, later.
+
+You can ask your employer to withhold income tax from noncash wages and other wages not subject to withholding. If your employer doesn’t agree to withhold tax, or if not enough is withheld, you may have to pay estimated tax, as discussed later under Estimated Tax for 2026.
+
+Military retirees. Military retirement pay is treated in the same manner as regular pay for income tax withholding purposes, even though it is treated as a pension or annuity for other tax purposes.
+
+Household workers. If you are a household worker, you can ask your employer to withhold income tax from your pay. A household worker is an employee who performs household work in a private home, local college club, or local fraternity or sorority chapter.
+
+Tax is withheld only if you want it withheld and your employer agrees to withhold it. If you don’t have enough income tax withheld, you may have to pay estimated tax, as discussed later under Estimated Tax for 2026.
+
+Farmworkers. Generally, income tax is withheld from your cash wages for work on a farm unless your employer:
+
+• Pays you cash wages of less than $150 during the year, and
+• Has expenditures for agricultural labor totaling less than $2,500 during the year.
+
+Differential wage payments. When employees are on leave from employment for military duty, some employers make up the difference between the military pay and civilian pay. Payments to an employee who is on active duty for a period of more than 30 days will be subject to income tax withholding, but not subject to social security, Medicare, or federal unemployment (FUTA) tax withholding. The wages and withholding will be reported on Form W-2, Wage and Tax Statement.

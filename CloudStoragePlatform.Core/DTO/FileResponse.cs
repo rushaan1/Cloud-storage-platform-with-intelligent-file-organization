@@ -17,5 +17,6 @@ namespace CloudStoragePlatform.Core.DTO
         public FileType FileType { get; set; }
         public byte[]? Thumbnail { get; set; }
         public float Size { get; set; }
+        public List<string>? Tags { get; set; }
     }
 }

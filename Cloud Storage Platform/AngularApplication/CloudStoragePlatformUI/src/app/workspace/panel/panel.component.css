@@ -198,18 +198,30 @@ span {
   margin-right: 3px
 }
 
-.dark-mode{
+.ai-organise{
   display: flex;
   gap: 7px;
   width: fit-content;
+  align-items: center;
 }
-.dark-mode-text-div{
+.ai-organise-text-div{
   width: fit-content;
 }
-.dark-mode:hover{
+.ai-organise:hover{
   text-decoration: underline;
   text-decoration-color: black;
   cursor: pointer;
+}
+.ai-organise.disabled{
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.ai-organise.disabled:hover{
+  text-decoration: none;
+  cursor: not-allowed;
+}
+.ai-organise .fa-spinner{
+  color: #6d5dfc;
 }
 
 .top-pointed-dropdown{
@@ -285,7 +297,7 @@ span {
   .style-text {
     font-size: 12px;
   }
-  .dark-mode-text-div{
+  .ai-organise-text-div{
     font-size: 12px;
   }
 }

@@ -1,0 +1,175 @@
+How To Figure Your Tax
+
+Introduction
+
+After you have figured your income and deductions, your next step is to figure your tax. This chapter discusses:
+
+• The general steps you take to figure your tax,
+• An additional tax you may have to pay called the alternative minimum tax (AMT), and
+• The conditions you must meet if you want the IRS to figure your tax.
+
+Useful Items
+
+You may want to see:
+
+Publication
+
+503 Child and Dependent Care Expenses
+
+505 Tax Withholding and Estimated Tax
+
+525 Taxable and Nontaxable Income
+
+531 Reporting Tip Income
+
+550 Investment Income and Expenses
+
+560 Retirement Plans for Small Business (SEP, SIMPLE, and Qualified Plans)
+
+575 Pension and Annuity Income
+
+596 Earned Income Credit (EIC)
+
+926 Household Employer's Tax Guide
+
+969 Health Savings Accounts and Other Tax-Favored Health Plans
+
+970 Tax Benefits for Education
+
+974 Premium Tax Credit (PTC)
+
+Form (and Instructions)
+
+W-2 Wage and Tax Statement
+
+Schedule R (Form 1040) Credit for the Elderly or the Disabled
+
+Schedule SE (Form 1040) Self-Employment Tax
+
+Schedule 8812 (Form 1040) Credits for Qualifying Children and Other Dependents
+
+1116 Foreign Tax Credit
+
+3800 General Business Credit
+
+4136 Credit for Federal Tax Paid on Fuels
+
+4970 Tax on Accumulation Distribution of Trusts
+
+5329 Additional Taxes on Qualified Plans (Including IRAs) and Other Tax-Favored Accounts
+
+5695 Residential Energy Credits
+
+5884 Work Opportunity Credit
+
+8396 Mortgage Interest Credit
+
+8801 Credit for Prior Year Minimum Tax—Individuals, Estates, and Trusts
+
+8835 Renewable Electricity Production Credit
+
+8839 Qualified Adoption Expenses
+
+8846 Credit for Employer Social Security and Medicare Taxes Paid on Certain Employee Tips
+
+8853 Archer MSAs and Long-Term Care Insurance Contracts
+
+8880 Credit for Qualified Retirement Savings Contributions
+
+8889 Health Savings Accounts (HSAs)
+
+8910 Alternative Motor Vehicle Credit
+
+8912 Credit to Holders of Tax Credit Bonds
+
+8936 Clean Vehicle Credits
+
+8959 Additional Medicare Tax
+
+8960 Net Investment Income Tax—Individuals, Estates, and Trusts
+
+8962 Premium Tax Credit (PTC)
+
+Figuring Your Tax
+
+Your income tax is based on your taxable income. After you figure your income tax and AMT, if any, subtract your tax credits and add any other taxes you may owe. The result is your total tax. Compare your total tax with your total payments to determine whether you are entitled to a refund or must make a payment.
+
+This section provides a general outline of how to figure your tax. You can find step-by-step directions in the Instructions for Form 1040.
+
+Tax. Most taxpayers use either the Tax Table or the Tax Computation Worksheet to figure their income tax. However, there are special methods if your income includes any of the following items.
+
+• A net capital gain. See Pub. 550.
+• Qualified dividends taxed at the same rates as a net capital gain. See Pub. 550.
+• Lump-sum distributions. See Pub. 575.
+• Farming or fishing income. See Schedule J (Form 1040).
+• Tax for certain children who have unearned income. See Form 8615.
+• Parent's election to report child's interest and dividends. See Form 8814.
+• Foreign earned income exclusion or the housing exclusion. (See Form 2555, Foreign Earned Income, and the Foreign Earned Income Tax Worksheet in the Instructions for Form 1040.)
+
+Credits. After you figure your income tax and any AMT (discussed later), determine if you are eligible for any tax credits. Eligibility information for these tax credits is discussed in other publications and your form instructions. The following items are some of the credits you may be able to subtract from your tax and shows where you can find more information on each credit.
+
+• Adoption credit. See Form 8839.
+• Alternative motor vehicle credit. See Form 8910.
+• Child and dependent care credit. See Pub. 503.
+• Child tax credit. See Schedule 8812 (Form 1040).
+• Credit for employer social security and Medicare taxes paid on certain employee tips. See Form 8846.
+• Credit to holders of tax credit bonds. See Form 8912.
+• Education credit. See Pub. 970.
+• Elderly or disabled credit. See Schedule R (Form 1040).
+• Foreign tax credit. See Form 1116.
+• General business credit. See Form 3800.
+• Mortgage interest credit. See Form 8396.
+• Clean vehicle credits. See Form 8936.
+• Premium tax credit. See Pub. 974.
+• Prior year minimum tax credit. See Form 8801.
+• Renewable electricity production credit. See Form 8835.
+• Residential clean energy credit. See Form 5695.
+• Retirement savings contribution credit. See Form 8880.
+• Work opportunity credit. See Form 5884.
+
+Some credits (such as the earned income credit) aren't listed because they are treated as payments. See Payments, later.
+
+Other taxes. After you subtract your tax credits, determine whether there are any other taxes you must pay. This chapter doesn't explain these other taxes. You can find that information in other publications and your form instructions. See the following list for other taxes you may need to add to your income tax.
+
+• Additional Medicare tax. See Form 8959.
+• Additional tax on ABLE accounts. See Pub. 969.
+• Additional tax on Archer MSAs and long-term care insurance contracts. See Form 8853.
+• Additional tax on Coverdell ESAs. See Form 5329.
+• Additional tax on HSAs. See Form 8889.
+• Additional tax on income you received from a nonqualified deferred compensation plan that fails to meet certain requirements. See the Instructions for Form 1040.
+• Additional tax on qualified plans and other tax-favored accounts. See Form 5329.
+• Additional tax on qualified retirement plans and IRAs. See Form 5329.
+• Additional tax on qualified tuition programs. See Pub. 970.
+• Excise tax on insider stock compensation from an expatriated corporation. See the Instructions for Form 1040.
+• Household employment taxes. See Pub. 926.
+• Interest on the deferred tax on gain from certain installment sales with a sales price over $150,000. See the Instructions for Form 1040.
+• Interest on the tax due on installment income from the sale of certain residential lots and timeshares. See the Instructions for Form 1040.
+• Net investment income tax. See Form 8960.
+• Recapture of an education credit. See Pub. 970.
+• Recapture of other credits. See the Instructions for Form 1040.
+• Section 72(m)(5) excess benefits tax. See Pub. 560.
+• Self-employment tax. See Schedule SE (Form 1040).
+• Social security and Medicare tax on tips. See Pub. 531.
+• Social security and Medicare tax on wages. See Pub. 525.
+• Tax on accumulation distribution of trusts. See Form 4970.
+• Tax on golden parachute payments. See the Instructions for Form 1040.
+• Uncollected social security and Medicare tax on group-term life insurance. See Form W-2.
+• Uncollected social security and Medicare tax on tips. See Pub. 531.
+
+You may also have to pay AMT (discussed later in this chapter).
+
+Payments. After you determine your total tax, figure the total payments you have already made for the year. Include credits that are treated as payments. This chapter doesn't explain these payments and credits. You can find that information in other publications and your form instructions. See the following list of payments and credits that you may be able to include in your total payments.
+
+• Additional child tax credit. See Schedule 8812 (Form 1040).
+• American opportunity credit. See Pub. 970.
+• Credit for federal tax on fuels. See Form 4136.
+• Credit for tax on undistributed capital gain. See the Instructions for Form 1040.
+• Earned income credit. See Pub. 596.
+• Estimated tax paid. See Pub. 505.
+• Excess social security and RRTA tax withheld. See the Instructions for Form 1040.
+• Federal income tax withheld. See Pub. 505.
+• Net premium tax credit. See the Instructions for Form 8962 or the Instructions for Form 1040.
+• Qualified sick and family leave credits. See the Instructions for Form 1040.
+• Tax paid with extension. See the Instructions for Form 1040.
+
+Refund or balance due. To determine whether you are entitled to a refund or whether you must make a payment, compare your total payments with your total tax. If you are entitled to a refund, see your form instructions for information on having it directly deposited into one or more of your accounts (including a traditional IRA, Roth IRA, or a SEP-IRA).

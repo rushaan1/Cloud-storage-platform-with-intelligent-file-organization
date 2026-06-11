@@ -201,6 +201,16 @@ namespace Cloud_Storage_Platform.Controllers
         }
 
         [HttpGet]
+        [Route("organiseFolder")]
+        public async Task<ActionResult<List<FileSuggestionEntry>>> OrganiseFolder([ModelBinder(typeof(AppendToPath))] string path, int topK = 3)
+        {
+            FolderResponse? folder = await _foldersRetrievalService.GetFolderByFolderPath(path);
+            if (folder == null) return NotFound();
+            var entries = await _folderSuggestion.SuggestForFolderContentsAsync(folder.FolderId, topK);
+            return entries;
+        }
+
+        [HttpGet]
         [Route("getAllFavorites")]
         public async Task<ActionResult<BulkResponse>> GetAllFavoriteFolders(SortOrderOptions sortOrder = SortOrderOptions.DATEADDED_ASCENDING)
         {

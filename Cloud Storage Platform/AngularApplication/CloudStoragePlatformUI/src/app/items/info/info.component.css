@@ -194,3 +194,25 @@
     margin-right: 21px;
   }
 }
+
+.tags-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  margin-top: 4px;
+}
+.tags-label {
+  margin-right: 4px;
+  font-weight: 600;
+}
+.tag-chip {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 16px;
+  background: #ede9ff;
+  color: #5847e0;
+  font-size: 12px;
+  font-weight: 500;
+  border: 1px solid #d6cdff;
+}

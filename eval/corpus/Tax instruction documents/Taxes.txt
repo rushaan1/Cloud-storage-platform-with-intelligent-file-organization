@@ -1,0 +1,166 @@
+Taxes
+
+What's New
+
+State and local tax deduction limit increased. The overall limit on the deduction for state and local income, sales, and property taxes has increased to $40,000 ($20,000 if married filing separately). See Limitation on deduction for state and local taxes, later.
+
+Reminder
+
+No deduction for foreign taxes paid for real estate. You can no longer deduct foreign taxes you paid on real estate.
+
+Introduction
+
+This chapter discusses which taxes you can deduct if you itemize deductions on Schedule A (Form 1040). It also explains which taxes you can deduct on other schedules or forms and which taxes you can't deduct.
+
+This chapter covers the following topics.
+
+• Income taxes (federal, state, local, and foreign).
+• General sales taxes (state and local).
+• Real estate taxes (state, local, and foreign).
+• Personal property taxes (state and local).
+• Taxes and fees you can't deduct.
+
+Use Table 11-1 as a guide to determine which taxes you can deduct.
+
+The end of the chapter contains a section that explains which forms you use to deduct different types of taxes.
+
+Business taxes. You can deduct certain taxes only if they are ordinary and necessary expenses of your trade or business or of producing income. For information on these taxes, see chapter 8, Business Expenses in Pub. 334.
+
+State or local taxes. These are taxes imposed by the 50 states, U.S. territories, or any of their political subdivisions (such as a county or city), or by the District of Columbia.
+
+Indian tribal government. An Indian tribal government recognized by the Secretary of the Treasury as performing substantial government functions will be treated as a state for purposes of claiming a deduction for taxes. Income taxes, real estate taxes, and personal property taxes imposed by that Indian tribal government (or by any of its subdivisions that are treated as political subdivisions of a state) are deductible.
+
+General sales taxes. These are taxes imposed at one rate on retail sales of a broad range of classes of items.
+
+Foreign taxes. These are taxes imposed by a foreign country or any of its political subdivisions.
+
+Useful Items
+
+You may want to see:
+
+Publication
+
+502 Medical and Dental Expenses
+
+503 Child and Dependent Care Expenses
+
+504 Divorced or Separated Individuals
+
+514 Foreign Tax Credit for Individuals
+
+525 Taxable and Nontaxable Income
+
+530 Tax Information for Homeowners
+
+Form (and Instructions)
+
+Schedule A (Form 1040) Itemized Deductions
+
+Schedule C (Form 1040) Profit or Loss From Business (Sole Proprietorship)
+
+Schedule E (Form 1040) Supplemental Income and Loss
+
+Schedule F (Form 1040) Profit or Loss From Farming
+
+Schedule SE (Form 1040) Self-Employment Tax
+
+1116 Foreign Tax Credit
+
+For these and other useful items, go to IRS.gov/Forms.
+
+Tests To Deduct Any Tax
+
+The following two tests must be met for you to deduct any tax.
+
+• The tax must be imposed on you.
+• You must pay the tax during your tax year.
+
+The tax must be imposed on you. In general, you can deduct only taxes imposed on you.
+
+Generally, you can deduct property taxes only if you are an owner of the property. If your spouse owns the property and pays the real estate taxes, the taxes are deductible on your spouse's separate return or on your joint return.
+
+You must pay the tax during your tax year. If you are a cash-basis taxpayer, you can deduct only those taxes you actually paid during your tax year. If you pay your taxes by check and the check is honored by your financial institution, the day you mail or deliver the check is the date of payment. If you use a pay-by-phone account (such as a credit card or electronic funds withdrawal), the date reported on the statement of the financial institution showing when payment was made is the date of payment. If you contest a tax liability and are a cash-basis taxpayer, you can deduct the tax only in the year you actually pay it (or transfer money or other property to provide for satisfaction of the contested liability). See Pub. 538 for details.
+
+If you use an accrual method of accounting, see Pub. 538 for more information.
+
+Income Taxes
+
+This section discusses the deductibility of state and local income taxes (including employee contributions to state benefit funds) and foreign income taxes.
+
+State and Local Income Taxes
+
+You can deduct state and local income taxes.
+
+Exception. You can't deduct state and local income taxes you pay on income that is exempt from federal income tax, unless the exempt income is interest income. For example, you can't deduct the part of a state's income tax that is on a cost-of-living allowance exempt from federal income tax.
+
+What To Deduct
+
+Your deduction may be for withheld taxes, estimated tax payments, or other tax payments as follows.
+
+Withheld taxes. You can deduct state and local income taxes withheld from your salary in the year they are withheld. Your Form(s) W-2 will show these amounts. Forms W-2G, 1099-B, 1099-DIV, 1099-G, 1099-K, 1099-MISC, 1099-NEC, 1099-OID, and 1099-R may also show state and local income taxes withheld.
+
+Estimated tax payments. You can deduct estimated tax payments you made during the year to a state or local government. However, you must have a reasonable basis for making the estimated tax payments. Any estimated state or local tax payments that aren't made in good faith at the time of payment aren't deductible.
+
+Example. You made an estimated state income tax payment. However, the estimate of your state tax liability shows that you will get a refund of the full amount of your estimated payment. You had no reasonable basis to believe you had any additional liability for state income taxes and you can't deduct the estimated tax payment.
+
+Refund applied to taxes. You can deduct any part of a refund of prior-year state or local income taxes that you chose to have credited to your 2025 estimated state or local income taxes.
+
+Don't reduce your deduction by either of the following items.
+
+• Any state or local income tax refund (or credit) you expect to receive for 2025.
+• Any refund of (or credit for) prior-year state and local income taxes you actually received in 2025.
+
+However, part or all of this refund (or credit) may be taxable. See Refund (or credit) of state or local income taxes, later.
+
+Separate federal returns. If you and your spouse file separate state, local, and federal income tax returns, each of you can deduct on your federal return only the amount of your own state and local income tax that you paid during the tax year.
+
+Joint state and local returns. If you and your spouse file joint state and local returns and separate federal returns, each of you can deduct on your separate federal return a part of the state and local income taxes paid during the tax year. You can deduct only the amount of the total taxes that is proportionate to your gross income compared to the combined gross income of you and your spouse. However, you can't deduct more than the amount you actually paid during the year. You can avoid this calculation if you and your spouse are jointly and individually liable for the full amount of the state and local income taxes. If so, you and your spouse can deduct on your separate federal returns the amount you each actually paid.
+
+Joint federal return. If you file a joint federal return, you can deduct the state and local income taxes both of you paid.
+
+Contributions to state benefit funds. As an employee, you can deduct mandatory contributions to state benefit funds withheld from your wages that provide protection against loss of wages. For example, certain states require employees to make contributions to state funds providing disability or unemployment insurance benefits. Mandatory payments made to the following state benefit funds are deductible as state income taxes on Schedule A (Form 1040), line 5a.
+
+• Alaska Unemployment Compensation Fund.
+• California Nonoccupational Disability Benefit Fund.
+• New Jersey Nonoccupational Disability Benefit Fund.
+• New Jersey Unemployment Compensation Fund.
+• New York Nonoccupational Disability Benefit Fund.
+• Pennsylvania Unemployment Compensation Fund.
+• Rhode Island Temporary Disability Benefit Fund.
+• Washington State Supplemental Workmen's Compensation Fund.
+
+Employee contributions to private or voluntary disability plans aren't deductible.
+
+Refund (or credit) of state or local income taxes. If you receive a refund of (or credit for) state or local income taxes in a year after the year in which you paid them, you may have to include the refund in income on Schedule 1 (Form 1040), line 1, in the year you receive it. This includes refunds resulting from taxes that were overwithheld, applied from a prior-year return, not figured correctly, or figured again because of an amended return. If you didn't itemize your deductions in the previous year, don't include the refund in income. If you deducted the taxes in the previous year, include all or part of the refund on Schedule 1 (Form 1040), line 1, in the year you receive the refund. For a discussion of how much to include, see Recoveries in Pub. 525 for more information.
+
+Foreign Income Taxes
+
+Generally, you can take either a deduction or a credit for income taxes imposed on you by a foreign country or a U.S. territory. However, you can't take a deduction or credit for foreign income taxes paid on income that is exempt from U.S. tax under the foreign earned income exclusion or the foreign housing exclusion. For information on these exclusions, see Pub. 54, Tax Guide for U.S. Citizens and Resident Aliens Abroad. For information on the foreign tax credit, see Pub. 514.
+
+State and Local General Sales Taxes
+
+You can elect to deduct state and local general sales taxes, instead of state and local income taxes, as an itemized deduction on Schedule A (Form 1040), line 5a. You can use either your actual expenses or the state and local sales tax tables to figure your sales tax deduction.
+
+Actual expenses. Generally, you can deduct the actual state and local general sales taxes (including compensating use taxes) if the tax rate was the same as the general sales tax rate.
+
+Food, clothing, and medical supplies. Sales taxes on food, clothing, and medical supplies are deductible as a general sales tax even if the tax rate was less than the general sales tax rate.
+
+Motor vehicles. Sales taxes on motor vehicles are deductible as a general sales tax even if the tax rate was less than the general sales tax rate. However, if you paid sales tax on a motor vehicle at a rate higher than the general sales tax, you can deduct only the amount of the tax that you would have paid at the general sales tax rate on that vehicle. Include any state and local general sales taxes paid for a leased motor vehicle. For purposes of this section, motor vehicles include cars, motorcycles, motor homes, recreational vehicles, sport utility vehicles, trucks, vans, and off-road vehicles.
+
+Trade or business items. Don't include sales taxes paid on items used in your trade or business on Schedule A (Form 1040). Instead, go to the instructions for the form you are using to report business income and expenses to see if you can deduct these taxes.
+
+If you use the actual expenses method, you must have receipts to show the general sales taxes paid.
+
+Optional sales tax tables. Instead of using your actual expenses, you can figure your state and local general sales tax deduction using the state and local sales tax tables in the Instructions for Schedule A (Form 1040). You may also be able to add the state and local general sales taxes paid on certain specified items.
+
+Your applicable table amount is based on the state where you live, your income, and your family size. Your income is your adjusted gross income plus any nontaxable items such as the following.
+
+• Tax-exempt interest.
+• Veterans' benefits.
+• Nontaxable combat pay.
+• Workers' compensation.
+• Nontaxable part of social security and railroad retirement benefits.
+• Nontaxable part of IRA, pension, or annuity distributions, excluding rollovers.
+• Public assistance payments.
+
+If you lived in different states during the same tax year, you must prorate your applicable table amount for each state based on the days you lived in each state. See the instructions for Schedule A (Form 1040), line 5a, for details.

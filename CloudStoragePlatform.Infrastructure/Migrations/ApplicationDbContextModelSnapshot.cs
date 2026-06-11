@@ -60,6 +60,9 @@ namespace CloudStoragePlatform.Infrastructure.Migrations
                     b.Property<float>("Size")
                         .HasColumnType("real");
 
+                    b.Property<string>("Tags")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 

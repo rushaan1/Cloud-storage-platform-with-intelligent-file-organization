@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using System.Diagnostics;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Channels;
@@ -158,7 +159,10 @@ namespace CloudStoragePlatform.Core.Services.Ai
 
             try
             {
+                var swTotal = Stopwatch.StartNew();
+                var swStage = Stopwatch.StartNew();
                 string text = await extractor.ExtractAsync(file, ct);
+                long extractMs = swStage.ElapsedMilliseconds;
                 string hash = ComputeHash(text);
 
                 // Idempotency: skip if content unchanged and already completed
@@ -168,6 +172,11 @@ namespace CloudStoragePlatform.Core.Services.Ai
                     && !string.IsNullOrEmpty(existing.VectorId))
                 {
                     _logger.LogDebug("Content unchanged for FileId={FileId}; no re-embed", file.FileId);
+                    // Backfill tags if the file was embedded before tagging existed.
+                    if (string.IsNullOrWhiteSpace(file.Tags))
+                    {
+                        await TryGenerateAndSaveTagsAsync(sp, file, text, user.Id, ct);
+                    }
                     return;
                 }
 
@@ -175,10 +184,14 @@ namespace CloudStoragePlatform.Core.Services.Ai
                 emb.AttemptCount++;
                 await embRepo.Update(emb);
 
+                swStage.Restart();
                 float[] vector = await vertex.EmbedAsync(text, EmbeddingTaskType.RetrievalDocument, ct);
+                long embedMs = swStage.ElapsedMilliseconds;
 
+                swStage.Restart();
                 var metadata = BuildFileMetadata(file, user.Id);
                 await pinecone.UpsertAsync(file.FileId.ToString(), vector, metadata, ct);
+                long upsertMs = swStage.ElapsedMilliseconds;
 
                 emb.Status = EmbeddingStatus.Completed;
                 emb.VectorId = file.FileId.ToString();
@@ -190,8 +203,19 @@ namespace CloudStoragePlatform.Core.Services.Ai
                 // Mark parent folder centroid stale (Upsert also creates if missing)
                 await folderEmbRepo.Upsert(file.ParentFolderId, user.Id);
 
+                long totalMs = swTotal.ElapsedMilliseconds;
+                // Machine-parseable timing line consumed by eval/compute_metrics.py.
+                _logger.LogInformation("[Embedding] FileId={FileId} extract_ms={ExtractMs} embed_ms={EmbedMs} upsert_ms={UpsertMs} total_ms={TotalMs}",
+                    file.FileId, extractMs, embedMs, upsertMs, totalMs);
+
                 await sse.SendEventAsync("embedded", new { fileId = file.FileId }, user.Id);
                 _logger.LogInformation("Embedded FileId={FileId} (reason={Reason}, attempt={Attempt})", file.FileId, job.Reason, emb.AttemptCount);
+
+                // AI tags (best effort; doesn't block suggestion or rest of pipeline)
+                if (string.IsNullOrWhiteSpace(file.Tags))
+                {
+                    await TryGenerateAndSaveTagsAsync(sp, file, text, user.Id, ct);
+                }
 
                 if (!job.SuppressSuggestion)
                 {
@@ -238,6 +262,26 @@ namespace CloudStoragePlatform.Core.Services.Ai
                         catch (OperationCanceledException) { }
                     }, ct);
                 }
+            }
+        }
+
+        private async Task TryGenerateAndSaveTagsAsync(IServiceProvider sp, File file, string extractedText, Guid userId, CancellationToken ct)
+        {
+            try
+            {
+                var tagger = sp.GetRequiredService<IGeminiTagger>();
+                var fileRepo = sp.GetRequiredService<IFilesRepository>();
+                var sse = sp.GetRequiredService<SSE>();
+                var tags = await tagger.TagAsync(extractedText, ct);
+                if (tags.Count == 0) return;
+                file.Tags = System.Text.Json.JsonSerializer.Serialize(tags);
+                await fileRepo.UpdateFile(file, true, false, false, false);
+                await sse.SendEventAsync("tagged", new { fileId = file.FileId, tags }, userId);
+                _logger.LogInformation("Tagged FileId={FileId} with {Count} tags", file.FileId, tags.Count);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "Tag generation failed for FileId={FileId}", file.FileId);
             }
         }
 
