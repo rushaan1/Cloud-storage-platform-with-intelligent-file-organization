@@ -1,4 +1,4 @@
-# Cloud Storage Platform
+# Cloud Storage Platform with Intelligent File Organization
 
 <div align="center">
 
