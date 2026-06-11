@@ -32,7 +32,7 @@
 
 ## 🎯 Overview
 
-Cloud Storage Platform is a comprehensive, enterprise-grade cloud storage solution built with modern web technologies. It provides secure file storage, advanced file management capabilities, real-time synchronization, and AI-powered features to enhance user productivity.
+Cloud Storage Platform with Intelligent File Organization is a comprehensive, enterprise-grade cloud storage solution built with modern web technologies. It provides secure file storage, advanced file management capabilities, real-time synchronization, and AI-powered features to enhance user productivity.
 
 ### Key Highlights
 
